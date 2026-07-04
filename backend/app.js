@@ -35,6 +35,11 @@ const buildAllowedOrigins = () => {
   return [...new Set([...fromEnv, ...(process.env.NODE_ENV === "production" ? [] : defaultOrigins)])];
 };
 
+const isAllowedProductionOrigin = (origin) => {
+  if (!origin) return false;
+  return /^(https:\/\/)[a-z0-9-]+\.vercel\.app$/i.test(origin) || /^(https:\/\/)[a-z0-9-]+\.onrender\.com$/i.test(origin);
+};
+
 const createApp = () => {
   const app = express();
   const allowedOrigins = buildAllowedOrigins();
@@ -68,6 +73,9 @@ const createApp = () => {
   const isAllowedOrigin = (origin) => {
     if (!origin) return true;
     if (allowedOrigins.includes(origin)) return true;
+    if (isProduction && isAllowedProductionOrigin(origin)) {
+      return true;
+    }
     if (!isProduction) {
       return /^(https?:\/\/)(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
     }
