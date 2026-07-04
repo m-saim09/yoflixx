@@ -1,0 +1,66 @@
+[
+  {
+    "title": "Level 1",
+    "slug": "level-1",
+    "shortDescription": "Launch-ready business presence for serious teams.",
+    "price": "$6.5k",
+    "billingType": "project",
+    "features": [
+      "Custom website strategy and messaging",
+      "Five premium marketing pages",
+      "Responsive design system and motion pass",
+      "Lead capture form with CRM handoff"
+    ],
+    "buttonText": "Choose Level 1",
+    "badge": "",
+    "isPopular": false,
+    "isActive": true,
+    "order": 1,
+    "_id": "d44ae1af4c91b7f4",
+    "createdAt": "2026-06-27T12:57:01.584Z",
+    "updatedAt": "2026-06-29T08:36:14.653Z",
+    "isFeatured": false
+  },
+  {
+    "title": "Level 2",
+    "slug": "level-2",
+    "shortDescription": "Growth stack for teams that need stronger storytelling and CRM structure.",
+    "price": "$12k",
+    "billingType": "project",
+    "features": [
+      "Everything in Level 1",
+      "Expanded case studies and proof sections",
+      "Advanced inquiry qualification fields",
+      "Admin dashboard with lead workflow states"
+    ],
+    "buttonText": "Choose Level 2",
+    "badge": "Most Popular",
+    "isPopular": true,
+    "isActive": true,
+    "order": 2,
+    "_id": "7686fb2feb4f4e8e",
+    "createdAt": "2026-06-27T12:57:01.584Z",
+    "updatedAt": "2026-06-27T12:57:01.584Z"
+  },
+  {
+    "title": "Level 3",
+    "slug": "level-3",
+    "shortDescription": "High-trust platform and operating layer for established businesses.",
+    "price": "$20k+",
+    "billingType": "project",
+    "features": [
+      "Everything in Level 2",
+      "Deeper UX refinement and interaction systems",
+      "Extended admin workflows and reporting",
+      "Launch support and iteration window"
+    ],
+    "buttonText": "Discuss Level 3",
+    "badge": "Executive",
+    "isPopular": false,
+    "isActive": true,
+    "order": 3,
+    "_id": "26a2798bf46a4021",
+    "createdAt": "2026-06-27T12:57:01.584Z",
+    "updatedAt": "2026-06-27T12:57:01.584Z"
+  }
+]

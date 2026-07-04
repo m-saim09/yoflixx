@@ -1,0 +1,21 @@
+[
+  {
+    "_id": "admin1",
+    "email": "admin@yoflix.local",
+    "password": "$2b$10$KAasUsaHJA4Uils.5VRI4ec2txvOHmXhoSY699j2OAevSa/p24dfS",
+    "updatedAt": "2026-06-26T13:24:05.091Z",
+    "isActive": true,
+    "lastLogin": "2026-06-26T13:24:05.090Z"
+  },
+  {
+    "name": "Platform Admin",
+    "email": "admin@yoflixx.com",
+    "password": "$2b$10$ZlT587e.XwqgH88h6fRChefsAxZC68xGXstvdANYAIHPTObpS2Fcy",
+    "role": "admin",
+    "_id": "79887a488a61455c",
+    "createdAt": "2026-06-26T13:43:55.444Z",
+    "updatedAt": "2026-06-28T18:11:19.035Z",
+    "isActive": true,
+    "lastLogin": "2026-06-28T18:11:19.032Z"
+  }
+]

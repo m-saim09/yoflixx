@@ -1,0 +1,17 @@
+{
+  "name": "yoflixx-monorepo",
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "scripts": {
+    "install:backend": "npm --prefix backend install",
+    "install:frontend": "npm --prefix frontend install",
+    "install:admin": "npm --prefix admin install",
+    "install": "npm install && npm run install:backend && npm run install:frontend && npm run install:admin",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev -- --port 5174",
+    "dev:admin": "cd admin && npm run dev -- --port 5175",
+    "dev": "concurrently --names backend,frontend,admin -c cyan,green,magenta \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:admin\""
+  }
+}

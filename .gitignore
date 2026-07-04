@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+admin/.env
+
+# Build outputs
+dist/
+dist-ssr/
+.output/
+.vercel/
+.nitro/
+.vinxi/
+.tanstack/
+admin/dist/
+frontend/dist/
+
+# Logs & temp
+*.log
+npm-debug.log*
+tmp-*.json
+tmp-*.js
+
+# OS / editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
+
+# Backend file storage (local dev only)
+backend/data/

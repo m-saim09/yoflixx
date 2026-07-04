@@ -1,0 +1,148 @@
+const defaultWebsiteSettings = {
+  businessInfo: {
+    websiteName: "Yoflix",
+    companyName: "Yoflix Studio",
+    tagline: "Premium websites and CRM systems for ambitious businesses.",
+    aboutText:
+      "We design high-trust digital experiences that help serious businesses look credible and convert better.",
+    footerDescription:
+      "We build premium business websites, polished pricing pages, and CRM-grade admin experiences that support real growth.",
+  },
+  heroSection: {
+    badge: "Premium digital systems",
+    title: "We build real websites that bring real clients.",
+    highlightText: "real websites",
+    description:
+      "No fake templates and no throwaway admin panels. We design high-trust websites and operating surfaces for businesses that want cleaner growth.",
+    primaryButtonText: "Start a project",
+    primaryButtonLink: "/contact",
+    secondaryButtonText: "View Services",
+    secondaryButtonLink: "/services",
+    backgroundImage:
+      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2000&q=80",
+  },
+  aboutSection: {
+    title: "We create websites for real businesses.",
+    description:
+      "Yoflix helps businesses build stronger online presence through clean design, modern delivery, and conversion-focused systems.",
+    bullets: [
+      "Business websites",
+      "Modern responsive design",
+      "Fast delivery",
+      "Long-term support",
+    ],
+    cards: [
+      {
+        title: "Professional Design",
+        body: "Minimal, premium, and credible layouts designed around trust.",
+      },
+      {
+        title: "Mobile Ready",
+        body: "Every project is built mobile-first for modern users and real buying behavior.",
+      },
+      {
+        title: "Business Focused",
+        body: "Design decisions are shaped by commercial clarity, not decorative noise.",
+      },
+    ],
+  },
+  contactInfo: {
+    businessEmail: "hello@yoflix.com",
+    supportEmail: "support@yoflix.com",
+    phoneNumber: "+92 300 1234567",
+    whatsappNumber: "+92 300 1234567",
+    officeAddress: "Lahore, Pakistan",
+    googleMapsLink: "https://maps.google.com",
+  },
+  socialLinks: {
+    facebook: "",
+    instagram: "",
+    linkedIn: "",
+    twitter: "",
+    youtube: "",
+  },
+  branding: {
+    logo: "",
+    favicon: "",
+    footerLogo: "",
+    primaryColor: "#2563eb",
+    secondaryColor: "#0f172a",
+    ogImage: "",
+  },
+  seoSettings: {
+    metaTitle: "Yoflix | Premium Business Websites and CRM Systems",
+    metaDescription:
+      "Yoflix creates premium websites, pricing funnels, and CRM-backed admin systems for serious business growth.",
+    keywords: ["web design", "crm dashboard", "business website", "admin panel"],
+  },
+  services: [
+    {
+      id: "positioning",
+      title: "Brand and product positioning",
+      eyebrow: "Strategy",
+      description:
+        "We turn broad offers into clear, premium narratives that buyers can understand in one pass.",
+      bullets: ["Messaging architecture", "Offer packaging", "Conversion hierarchy"],
+      stat: "Messaging before pixels",
+      icon: "layers",
+    },
+    {
+      id: "experience",
+      title: "Website and funnel experience",
+      eyebrow: "Design",
+      description:
+        "We design business websites that feel product-grade, not brochure-grade, across every breakpoint.",
+      bullets: ["Interaction design", "Premium responsive UI", "Inquiry journey"],
+      stat: "Built for serious buyers",
+      icon: "workflow",
+    },
+    {
+      id: "delivery",
+      title: "Full-stack implementation",
+      eyebrow: "Engineering",
+      description:
+        "We ship performant frontends, dependable APIs, and admin tooling that your team can actually use.",
+      bullets: ["Next.js and Node", "Database-backed forms", "Reusable architecture"],
+      stat: "Production-minded code",
+      icon: "chart",
+    },
+    {
+      id: "ops",
+      title: "CRM and lead operations",
+      eyebrow: "Operations",
+      description:
+        "We connect marketing and sales handoff with structure, visibility, and cleaner follow-through.",
+      bullets: ["Lead triage", "Status workflows", "Dashboard reporting"],
+      stat: "From inquiry to pipeline",
+      icon: "shield",
+    },
+  ],
+  caseStudies: [
+    {
+      id: "atlas",
+      title: "Atlas Operations Platform",
+      category: "B2B SaaS",
+      summary:
+        "Repositioned a generic software site into a sharper platform narrative with stronger demo conversion.",
+      outcomes: ["31% lift in demo requests", "Clearer enterprise proof", "Better lead routing"],
+    },
+    {
+      id: "meridian",
+      title: "Meridian Capital Advisory",
+      category: "Professional Services",
+      summary:
+        "Built a more executive-looking digital presence for a consultancy competing on trust and clarity.",
+      outcomes: ["Higher contact quality", "Sharper service packaging", "Mobile experience fixed"],
+    },
+    {
+      id: "pulse",
+      title: "Pulse Commerce Engine",
+      category: "Growth Product",
+      summary:
+        "Designed a more product-led web experience with stronger feature communication and pricing confidence.",
+      outcomes: ["More plan selections", "Lower bounce on pricing", "Improved trust signals"],
+    },
+  ],
+};
+
+module.exports = { defaultWebsiteSettings };

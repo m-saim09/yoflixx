@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Sophie Bennett",
+    "email": "sophie@meridiancapital.com",
+    "phone": "+1 (213) 555-0163",
+    "message": "Looking for a discovery call next week about redesigning our consulting site.",
+    "_id": "5e9a7f2ec7b4af3f",
+    "createdAt": "2026-06-27T12:57:01.577Z",
+    "updatedAt": "2026-06-27T12:57:01.577Z"
+  },
+  {
+    "name": "Julian Price",
+    "email": "julian@atlasops.com",
+    "phone": "+1 (312) 555-0190",
+    "message": "Need a quick overview of your Level 2 engagement and implementation process.",
+    "_id": "75350f0f1e130466",
+    "createdAt": "2026-06-27T12:57:01.577Z",
+    "updatedAt": "2026-06-27T12:57:01.577Z"
+  }
+]
