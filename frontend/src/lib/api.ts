@@ -4,10 +4,9 @@ const normalizeApiBase = (raw?: string) => {
   return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
 };
 
-export const API_BASE =
-  normalizeApiBase(import.meta.env.VITE_API_URL) ||
-  normalizeApiBase(import.meta.env.VITE_API_BASE) ||
-  (import.meta.env.DEV ? "http://localhost:5000/api" : "/api");
+const configuredApiBase = normalizeApiBase(import.meta.env.VITE_API_URL) || normalizeApiBase(import.meta.env.VITE_API_BASE);
+
+export const API_BASE = configuredApiBase || (import.meta.env.DEV ? "http://localhost:5000/api" : "/api");
 
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
