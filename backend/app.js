@@ -1,10 +1,11 @@
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
-const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const { createLeadRoutes } = require("./routes/leadRoutes");
 const contactRoutes = require("./routes/contactRoutes");
@@ -12,38 +13,27 @@ const analyticsRoutes = require("./routes/analyticsRoutes");
 const pricingRoutes = require("./routes/pricingRoutes");
 const websiteSettingsRoutes = require("./routes/websiteSettingsRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const { getDatabaseStatus } = require("./config/db");
 
 const buildAllowedOrigins = () => {
-  const defaultOrigins = [
-    "http://localhost:3000",
-    "http://localhost:5174",
-    "http://localhost:5175",
-    "http://localhost:5176",
-    "http://localhost:5177",
-    "http://127.0.0.1:5174",
-    "http://127.0.0.1:5175",
-    "http://127.0.0.1:5176",
-    "http://127.0.0.1:5177",
-  ];
-
-  const fromEnv = [process.env.CLIENT_URL, process.env.CORS_ORIGIN]
+  const fromEnv = [process.env.CLIENT_URL, process.env.ADMIN_URL, process.env.CORS_ORIGIN]
     .filter(Boolean)
     .flatMap((value) => value.split(","))
     .map((origin) => origin.trim())
     .filter(Boolean);
 
-  return [...new Set([...fromEnv, ...(process.env.NODE_ENV === "production" ? [] : defaultOrigins)])];
+  return [...new Set(fromEnv)];
 };
 
 const isAllowedProductionOrigin = (origin) => {
   if (!origin) return false;
-  return /^(https:\/\/)[a-z0-9-]+\.vercel\.app$/i.test(origin) || /^(https:\/\/)[a-z0-9-]+\.onrender\.com$/i.test(origin);
+  return /^(https:\/\/)[a-z0-9-]+(?:[.-][a-z0-9-]+)*(?:\.vercel\.app|\.onrender\.com|\.render\.com)$/i.test(origin);
 };
 
 const createApp = () => {
   const app = express();
   const allowedOrigins = buildAllowedOrigins();
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = (process.env.NODE_ENV || "development").toLowerCase() === "production";
 
   app.set("trust proxy", 1);
 
@@ -76,9 +66,6 @@ const createApp = () => {
     if (isProduction && isAllowedProductionOrigin(origin)) {
       return true;
     }
-    if (!isProduction) {
-      return /^(https?:\/\/)(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
-    }
     return false;
   };
 
@@ -107,13 +94,12 @@ const createApp = () => {
     data: {
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-      database:
-        process.env.DATABASE_PROVIDER === "file"
-          ? "file"
-          : mongoose.connection.readyState === 1
-            ? "connected"
-            : "disconnected",
+      database: getDatabaseStatus(),
     },
+  });
+
+  app.get("/", (req, res) => {
+    res.json({ success: true, message: "Yoflix API is running" });
   });
 
   app.get("/health", (req, res) => {
@@ -123,6 +109,13 @@ const createApp = () => {
   app.get("/api/health", (req, res) => {
     res.json(healthPayload());
   });
+
+  const uploadsDir = path.join(__dirname, "uploads");
+  if (fs.existsSync(uploadsDir)) {
+    app.use("/uploads", express.static(uploadsDir));
+  }
+
+  app.use(express.static(path.join(__dirname, "public")));
 
   app.use("/api/admin", authRoutes);
   app.use(["/api/leads", "/api/inquiries"], createLeadRoutes());

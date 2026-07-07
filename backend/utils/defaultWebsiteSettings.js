@@ -10,10 +10,10 @@ const defaultWebsiteSettings = {
   },
   heroSection: {
     badge: "Premium digital systems",
-    title: "We build real websites that bring real clients.",
-    highlightText: "real websites",
+    title: "Scale Your eBay Business with Expert Marketplace Support",
+    highlightText: "Expert Marketplace Support",
     description:
-      "No fake templates and no throwaway admin panels. We design high-trust websites and operating surfaces for businesses that want cleaner growth.",
+      "YOFLIX helps businesses create, manage, and grow eBay accounts through professional account management, virtual assistant support, and marketplace operations.",
     primaryButtonText: "Start a project",
     primaryButtonLink: "/contact",
     secondaryButtonText: "View Services",

@@ -1,9 +1,6 @@
-const useFile = process.env.DATABASE_PROVIDER === 'file';
+const mongoose = require("mongoose");
 
-if (!useFile) {
-  const mongoose = require("mongoose");
-
-  const websiteSettingsSchema = new mongoose.Schema(
+const websiteSettingsSchema = new mongoose.Schema(
   {
     businessInfo: {
       websiteName: { type: String, default: "Yoflix", trim: true },
@@ -92,36 +89,13 @@ if (!useFile) {
       default: [],
     },
     contentSections: {
-      type: Object,
+      type: mongoose.Schema.Types.Mixed,
       default: {},
     },
   },
   {
     timestamps: true,
   }
-  );
+);
 
-  module.exports = mongoose.model("WebsiteSettings", websiteSettingsSchema);
-} else {
-  const { createFileModel } = require('../lib/fileModel');
-  const Model = createFileModel('settings.json');
-  const originalFindOne = Model.findOne.bind(Model);
-  Model.findOne = async () => {
-    const records = await Model._readAll();
-    if (!records[0]) return null;
-    const doc = { ...records[0] };
-    doc.save = async function () {
-      const all = await Model._readAll();
-      const idx = all.findIndex((item) => String(item._id) === String(this._id));
-      const next = { ...(idx >= 0 ? all[idx] : {}), ...this, updatedAt: new Date().toISOString() };
-      if (idx >= 0) all[idx] = next; else all.unshift(next);
-      await Model._writeAll(all);
-      return this;
-    };
-    doc.toObject = function () {
-      return { ...this };
-    };
-    return doc;
-  };
-  module.exports = Model;
-}
+module.exports = mongoose.model("WebsiteSettings", websiteSettingsSchema);

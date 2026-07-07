@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Star, Play, Quote } from "lucide-react";
-import { Navbar, Footer, FinalCTA, PageHero, Stats, Reviews } from "@/components/sections";
+import { Navbar, Footer, FinalCTA, PageHero, Stats, SellersMapLight, TestimonialsSection } from "@/components/sections";
 
 export const Route = createFileRoute("/testimonials")({
   head: () => ({
@@ -72,41 +72,9 @@ function TestimonialsPage() {
       </section>
 
       <Stats />
+      <SellersMapLight />
 
-      {/* Written reviews */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-2xl text-center">
-            <span className="glass inline-block rounded-full px-3 py-1 text-xs font-medium text-primary">Reviews</span>
-            <h2 className="mt-4 text-4xl font-medium tracking-tight sm:text-5xl">What our clients <span className="font-display italic gradient-text">say</span></h2>
-          </motion.div>
-
-          <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {REVIEWS.map((r, i) => (
-              <motion.div
-                key={r.name}
-                initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-                whileHover={{ y: -6 }}
-                className="glass-strong relative rounded-3xl p-7"
-              >
-                <Quote className="absolute right-6 top-6 h-8 w-8 text-primary/15" />
-                <div className="flex gap-1 text-ebay-yellow">
-                  {Array.from({ length: 5 }).map((_, j) => <Star key={j} className="h-4 w-4 fill-current" />)}
-                </div>
-                <p className="mt-4 text-sm leading-relaxed text-foreground/85">"{r.text}"</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <img src={r.img} alt="" className="h-11 w-11 rounded-full object-cover ring-2 ring-white shadow-soft" />
-                  <div>
-                    <div className="text-sm font-semibold">{r.name}</div>
-                    <div className="text-xs text-muted-foreground">{r.role}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsSection />
 
       <FinalCTA />
       <Footer />

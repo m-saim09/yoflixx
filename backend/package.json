@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "build": "node --check server.js && node --check app.js && node --check config/db.js && node --check config/env.js && node --check models/Admin.js && node --check models/Contact.js && node --check models/Lead.js && node --check models/PricingPlan.js && node --check models/WebsiteSettings.js",
     "seed": "node seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +18,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
     "bcryptjs": "^3.0.3",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
@@ -26,10 +28,10 @@
     "express-rate-limit": "^8.5.2",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.6.2"
+    "mongodb": "^6.2.0",
+    "mongoose": "^8.9.1"
   },
   "devDependencies": {
-    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14"
   }
 }

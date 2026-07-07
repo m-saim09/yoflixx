@@ -3,8 +3,18 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Search,
-  FileText,
+  Sparkles,
+  LayoutGrid,
+  Compass,
+  Image,
+  Box,
+  CheckCircle2,
+  MessageSquare,
+  Activity,
+  Rocket,
   TrendingUp,
+  ShieldCheck,
+  FileText,
   Store,
   Headphones,
   Package,
@@ -23,11 +33,10 @@ import {
   Phone,
   MapPin,
   ArrowRight,
-  Sparkles,
   Menu,
   X,
 } from "lucide-react";
-import hero3d from "@/assets/hero-3d.png";
+import heroBg from "@/assets/hero-bg.png";
 import sphereImg from "@/assets/sphere.png";
 import { apiRequest } from "@/lib/api";
 import { PricingCard } from "@/components/pricing-card";
@@ -93,28 +102,35 @@ export function PageHero({ eyebrow, title, accent, sub }: PageHeroProps) {
   );
 }
 
+// Keyframes for the animated bar defined globally within this module
+const _ = ``;
+/*
+Keyframes injected via global stylesheet elsewhere if needed. If your build strips
+CSS-in-JS, consider adding these keyframes to your main stylesheet.
+@keyframes yoflixShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: -100% 50%; }
+}
+*/
+
 /* ============ HERO ============ */
 export function Hero() {
   const { data: settings } = useWebsiteSettings();
-  const hero = settings?.heroSection ?? {} as any;
-  const businessInfo = settings?.businessInfo ?? {} as any;
+  const hero = settings?.heroSection ?? ({} as any);
+  const businessInfo = settings?.businessInfo ?? ({} as any);
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 25]);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [0, -24]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
 
-  const titleText =
-    hero.title ||
-    businessInfo.tagline ||
-    "Scale Your eBay Business with Expert Marketplace Support";
-  const highlightText = hero.highlightText || "Expert Marketplace Support";
+  const titleText = "Scale Your eBay Business with Expert Marketplace Support";
+  const highlightText = "Expert Marketplace Support";
   const heroSupportLine =
     hero.supportLine ||
     "Also supporting Walmart and TikTok Shop operations.";
   const heroDescription =
     hero.description ||
-    "YOFLIX helps businesses create, manage, and grow eBay accounts through professional account management, virtual assistant support, and marketplace operations.";
-  const heroImage = hero3d;
+    "YOFLIX helps businesses manage and grow eBay accounts with expert support.";
   const titleSegments = (() => {
     const safeTitle = titleText || "";
     const safeHighlight = highlightText?.trim() || "";
@@ -150,144 +166,82 @@ export function Hero() {
   const titleLength = (titleText || "").trim().length;
   const titleClassName =
     titleLength > 70
-      ? "text-3xl leading-[1.04] sm:text-4xl lg:text-5xl"
+      ? "text-3xl leading-[1.06] sm:text-4xl lg:text-5xl"
       : titleLength > 45
-        ? "text-4xl leading-[1.04] sm:text-5xl lg:text-6xl"
+        ? "text-4xl leading-[1.05] sm:text-5xl lg:text-6xl"
         : "text-5xl leading-[1.05] sm:text-6xl lg:text-7xl";
   const heroBadge = hero.badge || "Trusted eBay Growth Partner";
   const primaryButtonText = hero.primaryButtonText || "Book Consultation";
   const primaryButtonLink = hero.primaryButtonLink || "/contact";
   const secondaryButtonText = hero.secondaryButtonText || "View eBay Plans";
   const secondaryButtonLink = hero.secondaryButtonLink || "/pricing";
+  const chartHeights = [96, 136, 184, 238, 292, 340, 392];
+  const avatarSources = [
+    "https://i.pravatar.cc/80?img=12",
+    "https://i.pravatar.cc/80?img=32",
+    "https://i.pravatar.cc/80?img=47",
+    "https://i.pravatar.cc/80?img=68",
+    "https://i.pravatar.cc/80?img=5",
+  ];
 
   return (
-    <section ref={ref} id="home" className="relative overflow-hidden pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-24 lg:pb-24">
-      {/* ambient glow */}
-      <div className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.35),transparent)] blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-1/3 -z-10 h-[400px] w-[400px] rounded-full bg-[radial-gradient(closest-side,rgba(192,132,252,0.3),transparent)] blur-3xl" />
+    <section
+      ref={ref}
+      id="home"
+      className="relative isolate overflow-hidden px-6 py-20 sm:px-8 sm:py-24 lg:px-8 lg:py-28"
+      style={{
+        backgroundImage: `url(${heroBg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.78),transparent_36%),radial-gradient(circle_at_83%_16%,rgba(14,165,233,0.16),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(248,250,252,0.9))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-80 [background-image:radial-gradient(rgba(15,23,42,0.07)_1px,transparent_1px)] [background-size:20px_20px]" />
+      <div className="pointer-events-none absolute left-[-8%] top-[-10%] -z-10 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-[-16%] right-[-10%] -z-10 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl" />
 
-      {/* particles */}
-      {Array.from({ length: 14 }).map((_, i) => (
-        <motion.span
-          key={i}
-          className="pointer-events-none absolute h-1.5 w-1.5 rounded-full bg-primary/40"
-          style={{
-            left: `${(i * 37) % 100}%`,
-            top: `${((i * 53) % 90) + 5}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.8, 0.2],
-          }}
-          transition={{ duration: 4 + (i % 5), repeat: Infinity, delay: i * 0.3 }}
-        />
-      ))}
-
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-0 lg:px-0">
+      <div className="mx-auto max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          className="max-w-2xl mx-auto text-center"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium">
-            <span className="h-2 w-2 rounded-full bg-ebay-green animate-pulse-glow" />
-            {heroBadge}
-          </div>
-          <h1 className={`mt-6 max-w-4xl font-medium tracking-tight ${titleClassName}`}>
-            {titleSegments.map((segment, index) => (
-              <span
-                key={`${segment.text}-${index}`}
-                className={segment.highlight ? "font-display italic gradient-text" : ""}
-              >
-                {segment.text}
-              </span>
-            ))}
+          <h1 className={`font-semibold tracking-tight text-slate-900 ${titleClassName}`}>
+            {titleSegments.map((segment, idx) =>
+              segment.highlight ? (
+                <span key={idx} className="text-blue-900 font-bold">
+                  {segment.text}
+                </span>
+              ) : (
+                <span key={idx}>{segment.text}</span>
+              )
+            )}
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
+
+          <p className="mt-4 mx-auto max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
             {heroDescription}
           </p>
-          <p className="mt-3 max-w-xl text-sm uppercase tracking-[0.22em] text-foreground/70">
+
+          <p className="mt-2 text-sm font-medium uppercase tracking-[0.28em] text-slate-500">
             {heroSupportLine}
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <Link
               to={primaryButtonLink}
-              className="group relative z-10 inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3.5 text-sm font-medium text-white shadow-glow transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_12px_30px_rgba(109,93,252,0.28)]"
+              className="group inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3 text-sm font-medium text-white shadow-soft transition-all hover:scale-105"
             >
               {primaryButtonText}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <Link
               to={secondaryButtonLink}
-              className="glass inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-white/30"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-900 transition-all hover:bg-slate-50"
             >
               {secondaryButtonText}
             </Link>
           </div>
-          <div className="mt-10 flex items-center gap-4">
-            <div className="flex -space-x-3">
-              {[
-                "https://i.pravatar.cc/80?img=12",
-                "https://i.pravatar.cc/80?img=32",
-                "https://i.pravatar.cc/80?img=47",
-                "https://i.pravatar.cc/80?img=68",
-                "https://i.pravatar.cc/80?img=5",
-              ].map((src) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt="Client"
-                  className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-soft"
-                />
-              ))}
-            </div>
-            <div>
-              <div className="flex items-center gap-1 text-ebay-yellow">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-current" />
-                ))}
-                <span className="ml-1.5 text-sm font-medium text-foreground">4.9/5</span>
-              </div>
-              <p className="text-xs text-muted-foreground">from 200+ happy clients</p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* hero visual */}
-        <motion.div
-          style={{ y, rotate }}
-          className="relative mx-auto aspect-square w-full max-w-[560px]"
-        >
-          <div className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.35),transparent_70%)] blur-2xl" />
-          <motion.img
-            src={heroImage}
-            alt={hero.title || "Hero illustration"}
-            width={1024}
-            height={1024}
-            className="relative h-full w-full select-none object-contain drop-shadow-[0_40px_60px_rgba(109,93,252,0.35)]"
-            animate={{ y: [0, -18, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.img
-            src={sphereImg}
-            alt=""
-            aria-hidden
-            width={80}
-            height={80}
-            className="absolute -left-2 top-10 h-16 w-16 opacity-80"
-            animate={{ y: [0, 20, 0], rotate: [0, 15, 0] }}
-            transition={{ duration: 7, repeat: Infinity }}
-          />
-          <motion.img
-            src={sphereImg}
-            alt=""
-            aria-hidden
-            width={56}
-            height={56}
-            className="absolute right-4 bottom-12 h-12 w-12 opacity-70"
-            animate={{ y: [0, -15, 0] }}
-            transition={{ duration: 5, repeat: Infinity }}
-          />
         </motion.div>
       </div>
     </section>
@@ -315,7 +269,7 @@ export function Navbar() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="fixed top-0 left-0 right-0 z-50 px-4 pt-4"
     >
-      <nav className="glass-strong mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 py-3 sm:px-7">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full bg-transparent px-5 py-3 sm:px-7">
           <Link to="/" className="flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-xl gradient-primary text-white shadow-glow">
             <Sparkles className="h-5 w-5" />
@@ -359,7 +313,7 @@ export function Navbar() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-strong mx-auto mt-2 max-w-7xl rounded-3xl p-4 lg:hidden"
+          className="mx-auto mt-2 max-w-7xl rounded-3xl bg-white/80 p-4 shadow-lg backdrop-blur-sm lg:hidden"
         >
           <ul className="flex flex-col gap-1">
             {NAV.map((n) => (
@@ -390,28 +344,28 @@ export function Navbar() {
 /* ============ LOGO STRIP ============ */
 const PLATFORMS = [
   {
-    name: "eBay",
-    src: "https://logos-world.net/wp-content/uploads/2020/11/eBay-Logo.png",
-    alt: "eBay logo",
-    className: "h-10 sm:h-12",
-  },
-  {
     name: "Walmart",
     src: "https://companieslogo.com/img/orig/WMT_BIG-4dae0070.png?t=1737085433",
     alt: "Walmart logo",
     className: "h-10 sm:h-12",
   },
   {
+    name: "eBay",
+    src: "https://logos-world.net/wp-content/uploads/2020/11/eBay-Logo.png",
+    alt: "eBay logo",
+    className: "h-20 sm:h-22 mx-auto",
+  },
+  {
     name: "TikTok Shop",
     src: "https://static.freepnglogo.com/images/all_img/1714299055tiktok-shop-logo-png.png",
     alt: "TikTok Shop logo",
-    className: "h-12 sm:h-14",
+    className: "h-8 sm:h-10",
   },
 ];
 
 export function LogoStrip() {
   return (
-    <section className="border-y border-white/40 bg-white/30 py-10 backdrop-blur-sm">
+    <section className="border-y border-white/40 bg-white py-10 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-6">
         <p className="text-center text-xs uppercase tracking-[0.22em] text-muted-foreground">
           Trusted across leading platforms
@@ -602,84 +556,330 @@ export function MarketplaceSupport() {
   );
 }
 
+/* ============ OUR WORKING PROCESS ============ */
+const PROCESS = [
+  {
+    n: "01",
+    title: "Discovery & Strategy",
+    desc: "We understand your business goals, current challenges, and create a custom growth plan.",
+    points: ["Business Audit", "Growth Roadmap"],
+  },
+  {
+    n: "02",
+    title: "Account Optimization",
+    desc: "We optimize your eBay account, listings, store design, and SEO for maximum visibility.",
+    points: ["Listing Optimization", "Store Improvements"],
+  },
+  {
+    n: "03",
+    title: "Growth Execution",
+    desc: "We implement proven growth strategies, PPC campaigns, and marketplace expansion.",
+    points: ["PPC Management", "Sales Growth"],
+  },
+  {
+    n: "04",
+    title: "Scale & Support",
+    desc: "We continuously monitor, optimize, and scale your business for long-term success.",
+    points: ["Performance Reports", "Dedicated Support"],
+  },
+];
+
+const PROCESS_CONTAINER = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.22,
+      delayChildren: 0.16,
+    },
+  },
+};
+
+const PROCESS_STEP = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.85, ease: "easeOut" } },
+};
+
+export function OurWorkingProcess() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [tilt, setTilt] = useState<Record<number, { rx: number; ry: number }>>({});
+
+  const handleMove = (index: number, e: React.MouseEvent) => {
+    const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rx = ((y / rect.height - 0.5) * 6) * -1;
+    const ry = (x / rect.width - 0.5) * 6;
+    setTilt((t) => ({ ...t, [index]: { rx, ry } }));
+  };
+  const handleLeave = (index: number) => setTilt((t) => ({ ...t, [index]: { rx: 0, ry: 0 } }));
+
+  return (
+    <section className="relative bg-white py-20 sm:py-28">
+      {/* subtle background curves and particles */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left, rgba(15,23,42,0.04), transparent 20%), radial-gradient(ellipse_at_bottom_right, rgba(37,99,235,0.03), transparent 20%)]" />
+      <div className="mx-auto max-w-7xl px-6">
+        <SectionTitle eyebrow="HOW IT WORKS" title={<>Our Working Process</>} sub="A simple, transparent process that helps eBay sellers grow their business with confidence." />
+
+        {/* timeline with badges */}
+        <div className="mt-12 flex flex-col items-center gap-8">
+          <div className="relative w-full max-w-5xl">
+            <div className="absolute left-4 right-4 top-9 hidden md:block">
+              <motion.div
+                className="process-line"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                style={{ transformOrigin: "left center" }}
+              />
+            </div>
+
+            <motion.div
+              className="relative grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
+              variants={PROCESS_CONTAINER}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.35 }}
+            >
+              {PROCESS.map((p, i) => {
+                const t = tilt[i] ?? { rx: 0, ry: 0 };
+                return (
+                  <motion.div
+                    key={p.n}
+                    variants={PROCESS_STEP}
+                    whileHover={{ scale: 1.02 }}
+                    onMouseMove={(e) => handleMove(i, e)}
+                    onMouseLeave={() => handleLeave(i)}
+                    className="relative z-10 flex flex-col items-center px-3"
+                    style={{ transform: `perspective(900px) rotateX(${t.rx}deg) rotateY(${t.ry}deg)` }}
+                  >
+                    <motion.div
+                      initial={{ scale: 0.64, rotate: -6 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="process-badge h-24 w-24 flex items-center justify-center rounded-full"
+                      whileHover={{ rotate: 6 }}
+                    >
+                      <span className="text-2xl font-bold" style={{ color: "#0F172A" }}>{p.n}</span>
+                    </motion.div>
+
+                    {/* timeline dot for desktop */}
+                    <div className="mt-4 hidden md:block">
+                      <div className="process-dot pulse" />
+                    </div>
+
+                    <h4 className="mt-6 text-center text-lg font-semibold text-[#0F172A]">{p.title}</h4>
+                    <p className="mt-2 text-center text-sm text-slate-600 max-w-xs">{p.desc}</p>
+
+                    <ul className="mt-3 space-y-1 text-sm text-slate-600">
+                      {p.points.map((pt) => (
+                        <li key={pt} className="flex items-center gap-2">
+                          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-50 text-blue-600 text-xs font-semibold">✓</span>
+                          <span>{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 /* ============ SERVICES ============ */
 const SERVICES = [
   {
     icon: Search,
-    title: "Account Creation",
-    desc: "Structured eBay account setup, store launch support and platform readiness.",
-    color: "ebay-blue",
-  },
-  {
-    icon: UserCog,
-    title: "Account Management",
-    desc: "Daily eBay store oversight, performance monitoring and compliance care.",
-    color: "ebay-green",
-  },
-  {
-    icon: Users,
-    title: "Virtual Assistant Services",
-    desc: "Dedicated marketplace support for listings, messaging, tasks and reporting.",
-    color: "primary",
+    number: "01",
+    title: "eBay Account Setup",
+    desc: "Launch your eBay presence with structured onboarding, account configuration, and marketplace readiness.",
   },
   {
     icon: FileText,
-    title: "Product Listing",
-    desc: "Conversion-led listings with SEO, category fit and optimized product content.",
-    color: "ebay-yellow",
-  },
-  {
-    icon: Headphones,
-    title: "Customer Support",
-    desc: "Professional buyer communication, returns handling and reputation care.",
-    color: "ebay-red",
+    number: "02",
+    title: "eBay Listing Optimization",
+    desc: "Refine titles, descriptions, bullet points, and listing structure to boost search visibility and conversion.",
   },
   {
     icon: Store,
-    title: "Store Operations",
-    desc: "Order flow, inventory updates and daily marketplace operations support.",
-    color: "primary",
+    number: "03",
+    title: "eBay Store Design",
+    desc: "Create a polished store experience with branded layouts, category structure, and premium presentation.",
+  },
+  {
+    icon: BarChart3,
+    number: "04",
+    title: "eBay SEO",
+    desc: "Drive better organic discovery with keyword strategy, competitor research, and listing-level SEO.",
+  },
+  {
+    icon: TrendingUp,
+    number: "05",
+    title: "eBay PPC Management",
+    desc: "Scale ad performance through smart campaigns, bid optimization, and conversion-focused strategy.",
+  },
+  {
+    icon: Package,
+    number: "06",
+    title: "Product Research",
+    desc: "Find winning inventory opportunities using demand signals, pricing insights, and market analysis.",
+  },
+  {
+    icon: Sparkles,
+    number: "07",
+    title: "Listing Images & A+ Style Graphics",
+    desc: "Elevate product presentation with premium imagery, lifestyle visuals, and brand-ready graphics.",
+  },
+  {
+    icon: Users,
+    number: "08",
+    title: "Inventory Management",
+    desc: "Stay organized with stock updates, replenishment planning, and efficient catalog maintenance.",
+  },
+  {
+    icon: Package,
+    number: "09",
+    title: "Order Management",
+    desc: "Deliver a smoother fulfillment experience with order processing support and operational consistency.",
+  },
+  {
+    icon: Headphones,
+    number: "10",
+    title: "Customer Support",
+    desc: "Protect buyer trust with responsive communication, issue handling, and professional service standards.",
+  },
+  {
+    icon: Check,
+    number: "11",
+    title: "Account Health & Performance",
+    desc: "Monitor seller performance, account compliance, and growth health with proactive support.",
+  },
+  {
+    icon: Zap,
+    number: "12",
+    title: "eBay Growth Strategy",
+    desc: "Build a scalable roadmap for expansion with data-led planning, positioning, and marketplace growth.",
   },
 ];
 
 export function Services() {
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+  const [cardMotion, setCardMotion] = useState<Record<number, { x: number; y: number; rotateX: number; rotateY: number; glowX: number; glowY: number }>>({});
+
+  const updateCardMotion = (index: number, event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const px = (x / rect.width - 0.5) * 12;
+    const py = (0.5 - y / rect.height) * 12;
+
+    setActiveCard(index);
+    setCardMotion((prev) => ({
+      ...prev,
+      [index]: { x: px * 0.7, y: py * 0.7, rotateX: py, rotateY: px, glowX: x, glowY: y },
+    }));
+  };
+
+  const resetCardMotion = (index: number) => {
+    setActiveCard(null);
+    setCardMotion((prev) => ({
+      ...prev,
+      [index]: { x: 0, y: 0, rotateX: 0, rotateY: 0, glowX: 0, glowY: 0 },
+    }));
+  };
+
   return (
-    <section id="services" className="relative py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="services" className="relative bg-white py-24 sm:py-32">
+      <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.12),transparent_45%),radial-gradient(circle_at_10%_20%,rgba(15,23,42,0.08),transparent_20%)]" />
+      <div className="mx-auto max-w-7xl px-6 relative">
         <SectionTitle
-          eyebrow="Our Services"
+          eyebrow="OUR SERVICES"
           title={
             <>
-              Everything You Need To{" "}
-              <span className="font-display italic gradient-text">Succeed</span> On eBay
+              Everything Your <span className="font-display text-slate-950">eBay Business</span> Needs
             </>
           }
-          sub="Six dedicated capabilities, one premium team — built to compound your store's growth."
+          sub="Helping eBay sellers scale through account management, listing optimization, SEO, advertising, store management, and marketplace growth."
         />
-        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <motion.div
-              key={s.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              whileHover={{ y: -6 }}
-              className="group glass-strong relative overflow-hidden rounded-3xl p-7 transition-shadow hover:shadow-glow"
-            >
-              <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.25),transparent)] opacity-0 transition-opacity group-hover:opacity-100" />
-              <div
-                className={`grid h-12 w-12 place-items-center rounded-2xl bg-white shadow-soft text-${s.color}`}
+        {/* removed top eyebrow and inline CTA per design: CTA will be shown after cards */}
+
+        <div className="mt-14 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {SERVICES.map((s, i) => {
+            const motionState = cardMotion[i] ?? { x: 0, y: 0, rotateX: 0, rotateY: 0, glowX: 0, glowY: 0 };
+            const isActive = activeCard === i;
+
+            return (
+              <motion.div
+                key={s.title}
+                initial={{ opacity: 0, y: 32, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -10, scale: 1.01 }}
+                onMouseMove={(event) => updateCardMotion(i, event)}
+                onMouseLeave={() => resetCardMotion(i)}
+                style={{
+                  transformPerspective: 1400,
+                  transformStyle: "preserve-3d",
+                  rotateX: isActive ? motionState.rotateX : 0,
+                  rotateY: isActive ? motionState.rotateY : 0,
+                  x: isActive ? motionState.x : 0,
+                  y: isActive ? motionState.y : 0,
+                }}
+                className={`group relative overflow-hidden rounded-[20px] border border-slate-200 bg-white p-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] transition duration-300 ease-out will-change-transform ${isActive ? "border-blue-600/30 shadow-[0_28px_90px_rgba(37,99,235,0.17)]" : "hover:border-slate-300"}`}
               >
-                <s.icon className="h-6 w-6" />
-              </div>
-              <h3 className="mt-5 text-xl font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-              <div className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                Learn more <ArrowRight className="h-4 w-4" />
-              </div>
-            </motion.div>
-          ))}
+                <div className="pointer-events-none absolute inset-x-5 top-5 h-32 rounded-[20px] bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.14),transparent_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+                <motion.div
+                  className="pointer-events-none absolute inset-0 rounded-[20px]"
+                  animate={{ opacity: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  style={{
+                    background: `radial-gradient(220px circle at ${motionState.glowX}px ${motionState.glowY}px, rgba(37,99,235,0.12), transparent 60%)`,
+                  }}
+                />
+                <span className="pointer-events-none absolute right-6 top-6 text-[3.6rem] font-semibold tracking-[0.14em] text-slate-900/5">
+                  {s.number}
+                </span>
+
+                <div className="relative z-10 flex items-center justify-start gap-4">
+                  <div className="grid h-14 w-14 place-items-center rounded-3xl border border-slate-200 bg-slate-50 text-slate-950 shadow-sm">
+                    <s.icon className="h-6 w-6" />
+                  </div>
+                </div>
+
+                <h3 className="relative z-10 mt-6 text-2xl font-semibold tracking-tight text-slate-950">
+                  {s.title}
+                </h3>
+                {s.desc ? (
+                  <p className="relative z-10 mt-3 text-sm leading-6 text-slate-600 opacity-0 max-h-0 overflow-hidden transition-all duration-200 group-hover:opacity-100 group-hover:max-h-40">
+                    {s.desc}
+                  </p>
+                ) : null}
+
+                <div className="relative z-10 mt-6 flex items-center gap-3 text-sm font-semibold text-blue-600">
+                  <span>Learn More</span>
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-blue-600 shadow-[0_12px_30px_rgba(37,99,235,0.08)] transition duration-200 ease-out group-hover:bg-blue-50">
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            to="/services"
+            className="group inline-flex items-center justify-center rounded-full bg-[#4c83fd] px-7 py-3 text-sm font-semibold text-white shadow-lg transition duration-200 hover:bg-[#3b6ee5] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+          >
+            <span>View All Services</span>
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
     </section>
@@ -828,18 +1028,6 @@ export function Reviews() {
   return (
     <section className="py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mx-auto max-w-2xl text-center"
-        >
-          <span className="glass inline-block rounded-full px-3 py-1 text-xs font-medium text-primary">Reviews</span>
-          <h2 className="mt-4 text-4xl font-medium tracking-tight sm:text-5xl">
-            What our clients <span className="font-display italic gradient-text">say</span>
-          </h2>
-        </motion.div>
-
         <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {REVIEWS.map((review, i) => (
             <motion.div
@@ -873,36 +1061,264 @@ export function Reviews() {
   );
 }
 
+const CLIENT_TESTIMONIALS = [
+  {
+    name: "Sarah Mitchell",
+    role: "eBay Seller",
+    company: "ElectroHub",
+    img: "https://i.pravatar.cc/120?img=47",
+    text: "Yoflix helped us transform our eBay business with a complete growth strategy. In four months, revenue increased 240% and our listings now convert far better.",
+  },
+  {
+    name: "James O'Connor",
+    role: "Vintage Reseller",
+    company: "RetroFinds",
+    img: "https://i.pravatar.cc/120?img=12",
+    text: "Their expert store refresh and marketplace optimization delivered steady visibility and reduced returns by 35%. Growth became predictable.",
+  },
+  {
+    name: "Aisha Patel",
+    role: "Home & Garden Seller",
+    company: "Garden Grove",
+    img: "https://i.pravatar.cc/120?img=44",
+    text: "From product listings to customer messaging, the team created a repeatable process that increased average order value and buyer satisfaction.",
+  },
+  {
+    name: "Carlos Reyes",
+    role: "Fashion Seller",
+    company: "StyleStreet",
+    img: "https://i.pravatar.cc/120?img=68",
+    text: "Yoflix brought clarity to our operations with standout listings and smarter ad campaigns. Our daily sales velocity improved significantly.",
+  },
+  {
+    name: "Nadia Hassan",
+    role: "Beauty & Wellness Seller",
+    company: "GlowHaus",
+    img: "https://i.pravatar.cc/120?img=32",
+    text: "I tried multiple agencies before Yoflix. They're the only one that delivered. Our product research alone uncovered $40k in new SKUs.",
+  },
+  {
+    name: "Marcus Chen",
+    role: "Auto Parts Seller",
+    company: "GearLane",
+    img: "https://i.pravatar.cc/120?img=33",
+    text: "The team turned our storefront from cluttered to premium. We went from 50 orders a month to 400 in under a quarter.",
+  },
+];
+
+export function TestimonialsSection() {
+  return (
+    <section className="bg-slate-50 py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-600 shadow-sm">
+            TESTIMONIALS
+          </span>
+          <h2 className="mt-6 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+            What our clients say
+          </h2>
+          <p className="mt-4 text-base leading-7 text-slate-600">
+            Real reviews from Amazon sellers we've helped recover, protect and scale.
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          {CLIENT_TESTIMONIALS.map((testimonial, index) => (
+            <motion.article
+              key={testimonial.name}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: index * 0.08 }}
+              whileHover={{ y: -4 }}
+              className="group rounded-[32px] border border-slate-200 bg-white p-8 shadow-[0_20px_60px_-24px_rgba(15,23,42,0.18)] transition hover:-translate-y-1 hover:shadow-[0_28px_80px_-28px_rgba(15,23,42,0.2)]"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <img src={testimonial.img} alt={testimonial.name} className="h-14 w-14 rounded-full object-cover" />
+                  <div>
+                    <div className="text-sm font-semibold text-slate-950">{testimonial.name}</div>
+                    <div className="text-xs uppercase tracking-[0.22em] text-slate-500">
+                      {testimonial.role}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-amber-400">
+                  {Array.from({ length: 5 }).map((_, starIndex) => (
+                    <Star key={starIndex} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+              </div>
+              <p className="mt-6 text-sm leading-7 text-slate-700">"{testimonial.text}"</p>
+              <div className="mt-6 text-xs uppercase tracking-[0.24em] text-slate-500">
+                {testimonial.company}
+              </div>
+            </motion.article>
+          ))}
+        </div>
+
+        <div className="mt-12 flex flex-wrap justify-center gap-3">
+          <a href="#" className="inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
+            Fiverr Profile →
+          </a>
+          <a href="#" className="inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 ring-1 ring-slate-200 transition hover:bg-slate-100">
+            Upwork Profile →
+          </a>
+          <a href="#" className="inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 ring-1 ring-slate-200 transition hover:bg-slate-100">
+            All testimonials →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const MARQUEE_REVIEWS = [
+  {
+    name: "Jack",
+    username: "@jack",
+    body: "I've never seen anything like this before. It's amazing. I love it.",
+    img: "https://avatar.vercel.sh/jack",
+  },
+  {
+    name: "Jill",
+    username: "@jill",
+    body: "I don't know what to say. I'm speechless. This is amazing.",
+    img: "https://avatar.vercel.sh/jill",
+  },
+  {
+    name: "John",
+    username: "@john",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/john",
+  },
+  {
+    name: "Jane",
+    username: "@jane",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/jane",
+  },
+  {
+    name: "Jenny",
+    username: "@jenny",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/jenny",
+  },
+  {
+    name: "James",
+    username: "@james",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/james",
+  },
+];
+
+const firstRow = MARQUEE_REVIEWS.slice(0, MARQUEE_REVIEWS.length / 2);
+const secondRow = MARQUEE_REVIEWS.slice(MARQUEE_REVIEWS.length / 2);
+
+const ReviewMarqueeCard = ({
+  img,
+  name,
+  username,
+  body,
+}: {
+  img: string;
+  name: string;
+  username: string;
+  body: string;
+}) => (
+  <figure className="relative h-full w-72 min-w-[18rem] flex-shrink-0 cursor-pointer overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white/95 p-5 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.15)] transition duration-300 ease-out hover:-translate-y-1 hover:bg-slate-50">
+    <div className="flex items-center gap-3">
+      <img className="h-12 w-12 rounded-full object-cover" src={img} alt={name} />
+      <div>
+        <figcaption className="text-sm font-semibold text-slate-950">{name}</figcaption>
+        <p className="text-xs uppercase tracking-[0.18em] text-slate-500">{username}</p>
+      </div>
+    </div>
+
+    <blockquote className="mt-4 text-sm leading-6 text-slate-600">"{body}"</blockquote>
+  </figure>
+);
+
+export function TestimonialsMarquee() {
+  const firstDuplicates = [...firstRow, ...firstRow];
+  const secondDuplicates = [...secondRow, ...secondRow];
+
+  return (
+    <section className="relative overflow-hidden bg-slate-50 py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(15,23,42,0.08),transparent_35%)]" />
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+            Testimonials
+          </span>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+            Seller stories in motion.
+          </h2>
+          <p className="mt-4 text-base text-slate-600">A continuous marquee of review highlights from Yoflix clients.</p>
+        </div>
+
+        <div className="mt-14 space-y-8">
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_32px_120px_-48px_rgba(15,23,42,0.16)]">
+            <div className="marquee marquee-left px-6 py-8">
+              {firstDuplicates.map((review, index) => (
+                <ReviewMarqueeCard key={`${review.username}-${index}`} {...review} />
+              ))}
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_32px_120px_-48px_rgba(15,23,42,0.16)]">
+            <div className="marquee marquee-right px-6 py-8">
+              {secondDuplicates.map((review, index) => (
+                <ReviewMarqueeCard key={`${review.username}-${index}`} {...review} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HowItWorks() {
   return (
-    <section id="how" className="relative py-24 sm:py-32">
+    <section id="how" className="relative py-24 sm:py-32 bg-white">
       <div className="mx-auto max-w-7xl px-6">
-        <SectionTitle
-          eyebrow="How It Works"
-          title={
-            <>
-              From first call to <span className="font-display italic gradient-text">scale</span>,
-              in four steps
-            </>
-          }
-        />
-        <div className="relative mt-16">
-          <div className="absolute left-0 right-0 top-12 hidden h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent lg:block" />
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <SectionTitle eyebrow="How It Works" title={<>How We Partner With Sellers — Simple, Predictable, Effective</>} />
+
+        <div className="mt-12">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm text-slate-600">A clear four-step process focused on measurable results.</p>
+          </div>
+
+          {/* Connector bar (thin, animated subtle gradient like screenshot) */}
+          <div className="mt-6 flex justify-center">
+            <div className="w-full max-w-4xl overflow-hidden bg-transparent flex items-center" style={{ height: 2 }}>
+              <div
+                className="w-full h-px"
+                style={{
+                  background: 'linear-gradient(90deg, rgba(255,255,255,0), rgba(124,94,246,0.18), rgba(255,255,255,0))',
+                  backgroundSize: '200% 100%',
+                  animation: 'yoflixShift 6s linear infinite',
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
               <motion.div
                 key={s.n}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative"
+                transition={{ duration: 0.45, delay: i * 0.06 }}
+                className="relative text-center"
               >
-                <div className="mx-auto grid h-24 w-24 place-items-center rounded-full neu">
-                  <span className="font-display text-3xl italic gradient-text">{s.n}</span>
+                <div className="mx-auto h-20 w-20 rounded-full bg-white flex items-center justify-center font-display italic text-xl shadow-[0_28px_60px_rgba(109,93,252,0.08)] ring-1 ring-white/50">
+                  <span className="text-2xl text-[#6d5dfc]">{s.n}</span>
                 </div>
-                <h3 className="mt-6 text-center text-xl font-semibold">{s.t}</h3>
-                <p className="mt-2 text-center text-sm text-muted-foreground">{s.d}</p>
+                <h3 className="mt-6 text-center text-lg font-semibold text-[#042c54]">{s.t}</h3>
+                <p className="mt-2 text-center text-sm text-slate-600 max-w-xs mx-auto">{s.d}</p>
               </motion.div>
             ))}
           </div>
@@ -1198,116 +1614,125 @@ export function Pricing() {
 const TESTIMONIALS = [
   {
     name: "Sarah Mitchell",
-    role: "Electronics Seller",
-    country: "��",
+    role: "eBay Seller",
+    company: "ElectroHub",
+    marketplace: "eBay",
+    country: "🇺🇸",
     img: "https://i.pravatar.cc/120?img=47",
-    text: "Yoflix helped us transform our eBay business with a complete growth strategy. In four months, monthly revenue increased 240% and our listings now convert far better.",
+    text: "Yoflix helped us transform our eBay business with a complete growth strategy. In four months, revenue increased 240% and our listings now convert far better.",
   },
   {
     name: "James O'Connor",
     role: "Vintage Reseller",
-    country: "��",
+    company: "RetroFinds",
+    marketplace: "Walmart",
+    country: "🇬🇧",
     img: "https://i.pravatar.cc/120?img=12",
-    text: "Their expert store refresh and marketplace optimization delivered steady visibility and reduced returns by 35%. Working with Yoflix made our growth predictable.",
+    text: "Their expert store refresh and marketplace optimization delivered steady visibility and reduced returns by 35%. Growth became predictable.",
   },
   {
     name: "Aisha Patel",
-    role: "Home & Garden",
-    country: "��",
+    role: "Home & Garden Seller",
+    company: "Garden Grove",
+    marketplace: "TikTok Shop",
+    country: "🇦🇺",
     img: "https://i.pravatar.cc/120?img=44",
-    text: "From product listings to customer messaging, their team created a repeatable process that increased average order value and buyer satisfaction.",
+    text: "From product listings to customer messaging, the team created a repeatable process that increased average order value and buyer satisfaction.",
+  },
+  {
+    name: "Carlos Reyes",
+    role: "Fashion Seller",
+    company: "StyleStreet",
+    marketplace: "eBay",
+    country: "🇨🇦",
+    img: "https://i.pravatar.cc/120?img=68",
+    text: "Yoflix brought clarity to our operations with standout listings and smarter ad campaigns. Our daily sales velocity improved significantly.",
   },
 ];
-export function Testimonials() {
-  const [idx, setIdx] = useState(0);
 
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setIdx((current) => (current + 1) % TESTIMONIALS.length);
-    }, 6000);
+export const MARQUEE_TESTIMONIALS = [
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+];
 
-    return () => window.clearInterval(interval);
-  }, []);
+const TESTIMONIAL_CARD = (
+  testimonial: (typeof TESTIMONIALS)[number],
+  index: number
+) => (
+  <motion.div
+    key={`${testimonial.name}-${index}`}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{
+      duration: 0.7,
+      delay: (index % TESTIMONIALS.length) * 0.08,
+      ease: [0.22, 1, 0.36, 1],
+    }}
+    whileHover={{
+      y: -10,
+      scale: 1.03,
+      rotateX: 2,
+      rotateY: -2,
+    }}
+    className="group relative flex-shrink-0 w-[320px] overflow-hidden rounded-[20px] border border-slate-200 bg-white p-6 shadow-[0_28px_80px_-36px_rgba(15,23,42,0.18)] transition-all duration-300"
+  >
+    {/* Hover Gradient */}
+    <div className="absolute inset-0 rounded-[20px] bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.12),transparent_45%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-  return (
-    <section className="relative isolate overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-1/2 top-8 h-72 w-72 -translate-x-1/2 rounded-full bg-fuchsia-300/30 blur-3xl" />
-        <div className="absolute left-[-8%] top-1/3 h-80 w-80 rounded-full bg-violet-400/25 blur-3xl" />
-        <div className="absolute right-[-5%] top-1/4 h-72 w-72 rounded-full bg-indigo-300/20 blur-3xl" />
-        <div className="absolute bottom-8 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full border border-white/60 bg-white/30 blur-2xl" />
-      </div>
+    <div className="absolute inset-0 rounded-[20px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.55),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-      <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-10">
-        <SectionTitle
-          eyebrow="Reviews"
-          title={
-            <>
-              <span className="font-display italic gradient-text">Trusted</span> by eBay Sellers Worldwide
-            </>
-          }
-          sub="Premium support, sharper listings, and growth that feels calm, measurable, and sustainable."
-        />
+    <div className="relative z-10 flex flex-col gap-5">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <img
+            src={testimonial.img}
+            alt={testimonial.name}
+            className="h-14 w-14 rounded-full object-cover ring-2 ring-blue-100"
+          />
 
-        <div className="mt-14 sm:mt-16">
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.35 }}
-            whileHover={{ scale: 1.01, y: -4 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_30px_90px_-24px_rgba(109,93,252,0.35)] backdrop-blur-xl sm:p-10 lg:p-12"
-          >
-            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-400" />
-            <div className="absolute right-6 top-6 h-16 w-16 rounded-full bg-gradient-to-br from-violet-200/60 to-fuchsia-200/40 blur-2xl" />
+          <div>
+            <h4 className="text-sm font-semibold text-slate-900">
+              {testimonial.name}
+            </h4>
 
-            <div className="relative">
-              <div className="flex justify-center">
-                <div className="text-6xl font-serif leading-none text-violet-300/40">
-                  "
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-center gap-1 text-amber-400 sm:mt-8">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-current" />
-                ))}
-              </div>
-
-              <p className="mx-auto mt-8 max-w-3xl text-center text-xl leading-relaxed font-medium text-slate-900 sm:text-2xl lg:text-[1.8rem] lg:leading-[1.45]">
-                “                {TESTIMONIALS[idx].text}”
-              </p>
-
-              <div className="mt-10 flex flex-col items-center gap-5">
-                <div className="h-px w-20 bg-gradient-to-r from-transparent via-violet-300 to-transparent" />
-                <div className="text-center">
-                  <div className="text-lg font-semibold tracking-tight text-slate-900">
-                    {TESTIMONIALS[idx].name}
-                  </div>
-                  <div className="mt-2 text-sm font-medium uppercase tracking-[0.22em] text-slate-500">
-                    {TESTIMONIALS[idx].role}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <div className="mt-8 flex items-center justify-center gap-3 sm:mt-10">
-            {TESTIMONIALS.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setIdx(i)}
-                aria-label={`Go to testimonial ${i + 1}`}
-                className={`rounded-full transition-all duration-300 ${i === idx ? "h-2.5 w-9 bg-violet-600 shadow-[0_0_0_4px_rgba(139,92,246,0.16)]" : "h-2.5 w-2.5 bg-violet-200/80 hover:bg-violet-400"}`}
-              />
-            ))}
+            <p className="text-xs uppercase tracking-[0.22em] text-slate-500">
+              {testimonial.company}
+            </p>
           </div>
         </div>
+
+        <div className="text-right">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">
+            {testimonial.marketplace}
+          </div>
+
+          <span className="text-xl">{testimonial.country}</span>
+        </div>
       </div>
-    </section>
-  );
-}
+
+      {/* Rating */}
+
+      <div className="flex gap-1 text-amber-400">
+        {Array.from({ length: 5 }).map((_, idx) => (
+          <Star
+            key={idx}
+            className="h-4 w-4 fill-current"
+          />
+        ))}
+      </div>
+
+      {/* Review */}
+
+      <p className="text-sm leading-7 text-slate-600">
+        {testimonial.text}
+      </p>
+    </div>
+  </motion.div>
+);
 
 /* ============ FAQ ============ */
 const FAQS = [

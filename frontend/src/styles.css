@@ -172,6 +172,17 @@
   100% { transform: translateX(-50%); }
 }
 
+@keyframes yoflixShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Optional: smoother motion for the connector bar */
+@media (prefers-reduced-motion: no-preference) {
+  .yoflix-connector { animation: yoflixShift 3s linear infinite; }
+}
+
 @utility animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -184,3 +195,82 @@
 @utility animate-marquee {
   animation: marquee 30s linear infinite;
 }
+
+/* Our Working Process styles */
+.process-badge {
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,249,252,0.95));
+  border: 2px solid #2563EB; /* blue-600 */
+  box-shadow: 0 18px 40px rgba(37,99,235,0.08), 0 2px 6px rgba(15,23,42,0.06);
+  position: relative;
+}
+.process-badge::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 9999px;
+  border: 2px dotted rgba(37,99,235,0.12);
+  pointer-events: none;
+}
+.process-line {
+  height: 2px;
+  background: linear-gradient(90deg, rgba(15,23,42,0.06), rgba(37,99,235,0.16) 40%, rgba(37,99,235,0.16) 60%, rgba(15,23,42,0.06));
+  position: relative;
+  overflow: visible;
+}
+.process-dot {
+  width: 8px;
+  height: 8px;
+  background: #2563EB;
+  border-radius: 9999px;
+  box-shadow: 0 6px 20px rgba(37,99,235,0.14);
+}
+.process-dot.pulse {
+  animation: pulse-glow 2.8s ease-in-out infinite;
+}
+
+.marquee-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 24px;
+  will-change: transform;
+}
+
+.marquee-left {
+  animation: marquee-left 35s linear infinite;
+}
+
+.marquee-right {
+  animation: marquee-right 35s linear infinite;
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+

@@ -1,9 +1,6 @@
-const useFile = process.env.DATABASE_PROVIDER === 'file';
+const mongoose = require("mongoose");
 
-if (!useFile) {
-  const mongoose = require("mongoose");
-
-  const pricingPlanSchema = new mongoose.Schema(
+const pricingPlanSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -67,12 +64,8 @@ if (!useFile) {
   {
     timestamps: true,
   }
-  );
+);
 
-  pricingPlanSchema.index({ isActive: 1, order: 1 });
+pricingPlanSchema.index({ isActive: 1, order: 1 });
 
-  module.exports = mongoose.model("PricingPlan", pricingPlanSchema);
-} else {
-  const { createFileModel } = require('../lib/fileModel');
-  module.exports = createFileModel('pricing.json');
-}
+module.exports = mongoose.model("PricingPlan", pricingPlanSchema);

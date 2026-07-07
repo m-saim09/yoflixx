@@ -1,25 +1,19 @@
-const requiredInProduction = ["JWT_SECRET", "MONGODB_URI"];
+const path = require("path");
+const dotenv = require("dotenv");
 
-const getMongoUri = () =>
-  process.env.MONGODB_URI || process.env.MONGO_URI || "";
+dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
+
+const requiredInProduction = ["JWT_SECRET", "MONGODB_URI", "CLIENT_URL", "ADMIN_URL"];
+
+const getMongoUri = () => process.env.MONGODB_URI || "";
 
 const validateEnv = () => {
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = (process.env.NODE_ENV || "development").toLowerCase() === "production";
   const missing = [];
 
   if (isProduction) {
     for (const key of requiredInProduction) {
-      if (key === "MONGODB_URI") {
-        if (!getMongoUri()) missing.push("MONGODB_URI (or MONGO_URI)");
-        continue;
-      }
       if (!process.env[key]) missing.push(key);
-    }
-
-    if (process.env.DATABASE_PROVIDER === "file") {
-      throw new Error(
-        "DATABASE_PROVIDER=file is not allowed in production. Remove it and set MONGODB_URI."
-      );
     }
   }
 
@@ -27,8 +21,15 @@ const validateEnv = () => {
     throw new Error(`Missing required environment variables: ${missing.join(", ")}`);
   }
 
-  if (!process.env.JWT_SECRET && !isProduction) {
+  if (!process.env.JWT_SECRET) {
+    if (isProduction) {
+      throw new Error("JWT_SECRET is required in production");
+    }
     console.warn("Warning: JWT_SECRET is not set. Authentication will fail.");
+  }
+
+  if (!process.env.MONGODB_URI) {
+    console.warn("MONGODB_URI is not configured. Set it before using data APIs.");
   }
 
   return {
@@ -38,6 +39,7 @@ const validateEnv = () => {
     mongoUri: getMongoUri(),
     jwtSecret: process.env.JWT_SECRET,
     clientUrl: process.env.CLIENT_URL || "",
+    adminUrl: process.env.ADMIN_URL || "",
     corsOrigin: process.env.CORS_ORIGIN || "",
   };
 };

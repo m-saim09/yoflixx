@@ -1,11 +1,7 @@
+const mongoose = require("mongoose");
 const { BUDGET_OPTIONS, CONTACT_SOURCES, LEAD_STATUSES, PLAN_OPTIONS, TIMELINE_OPTIONS } = require("../utils/constants");
 
-const useFile = process.env.DATABASE_PROVIDER === 'file';
-
-if (!useFile) {
-  const mongoose = require("mongoose");
-
-  const leadSchema = new mongoose.Schema(
+const leadSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -67,27 +63,23 @@ if (!useFile) {
       enum: LEAD_STATUSES,
       default: "New",
     },
-    isRead: {
-      type: Boolean,
-      default: false,
-    },
     source: {
       type: String,
       enum: CONTACT_SOURCES,
       default: "Website Inquiry",
     },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
   }
-  );
+);
 
-  leadSchema.index({ createdAt: -1 });
-  leadSchema.index({ status: 1, selectedPlan: 1 });
-  leadSchema.index({ fullName: "text", email: "text", companyName: "text", projectType: "text" });
+leadSchema.index({ createdAt: -1 });
+leadSchema.index({ status: 1, selectedPlan: 1 });
+leadSchema.index({ fullName: "text", email: "text", companyName: "text", projectType: "text" });
 
-  module.exports = mongoose.model("Lead", leadSchema);
-} else {
-  const { createFileModel } = require('../lib/fileModel');
-  module.exports = createFileModel('leads.json');
-}
+module.exports = mongoose.model("Lead", leadSchema);

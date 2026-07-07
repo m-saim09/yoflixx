@@ -1,9 +1,6 @@
-const useFile = process.env.DATABASE_PROVIDER === 'file';
+const mongoose = require("mongoose");
 
-if (!useFile) {
-  const mongoose = require("mongoose");
-
-  const contactSchema = new mongoose.Schema(
+const contactSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -37,12 +34,8 @@ if (!useFile) {
   {
     timestamps: true,
   }
-  );
+);
 
-  contactSchema.index({ createdAt: -1 });
+contactSchema.index({ createdAt: -1 });
 
-  module.exports = mongoose.model("Contact", contactSchema);
-} else {
-  const { createFileModel } = require('../lib/fileModel');
-  module.exports = createFileModel('contacts.json');
-}
+module.exports = mongoose.model("Contact", contactSchema);
