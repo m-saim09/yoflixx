@@ -14,7 +14,7 @@ const getAnalytics = asyncHandler(async (req, res) => {
     // dashboard can render without crashing.
     console.error("Analytics fetch failed:", error?.message || error);
     return res.json({
-      success: true,
+      success: false,
       message: "Analytics unavailable (dev fallback)",
       data: {
         totals: { leads: 0, contacts: 0, newInquiries: 0, activeProjects: 0, monthlyInquiries: 0 },

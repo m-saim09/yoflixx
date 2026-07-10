@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 
     if (token) {
       throw redirect({
-        to: "/_admin",
+        to: "/admin",
       });
     } else {
       throw redirect({

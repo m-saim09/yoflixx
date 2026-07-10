@@ -67,7 +67,7 @@ const getContacts = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Contacts fetch failed:", error?.message || error);
     return res.json({
-      success: true,
+      success: false,
       message: "Contacts unavailable (dev fallback)",
       data: { contacts: [], total: 0 },
     });

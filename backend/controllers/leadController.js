@@ -57,7 +57,7 @@ const getLeadList = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Lead list fetch failed:", error?.message || error);
     return res.json({
-      success: true,
+      success: false,
       message: "Leads unavailable (dev fallback)",
       data: { total: 0, page: pageNumber, pages: 1, leads: [], inquiries: [] },
     });

@@ -21,11 +21,4 @@ router.patch("/update/:id", protect, runValidator(validateObjectIdParam("id")), 
 router.patch("/status/:id", protect, runValidator(validateObjectIdParam("id")), updateConsultationStatus);
 router.delete("/delete/:id", protect, runValidator(validateObjectIdParam("id")), deleteConsultation);
 
-router.get("/", protect, getConsultations);
-router.get("/:id", protect, runValidator(validateObjectIdParam("id")), getConsultation);
-router.post("/", protect, runValidator(validateConsultation), createConsultation);
-router.patch("/:id", protect, runValidator(validateObjectIdParam("id")), runValidator(validateConsultationUpdate), updateConsultation);
-router.patch("/:id/status", protect, runValidator(validateObjectIdParam("id")), updateConsultationStatus);
-router.delete("/:id", protect, runValidator(validateObjectIdParam("id")), deleteConsultation);
-
 module.exports = router;
