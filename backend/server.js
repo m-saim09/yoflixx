@@ -5,19 +5,24 @@ const { createApp } = require("./app");
 const startServer = async () => {
   try {
     const config = validateEnv();
+    console.log("✓ Environment Loaded");
+
     await connectDatabase();
     const app = createApp();
 
     const server = app.listen(config.port, "0.0.0.0", () => {
-      console.log(`Server listening on port ${config.port} (${config.nodeEnv})`);
+      console.log("✓ Server Running");
+      console.log(`✓ Port: ${config.port}`);
+      console.log(`✓ Mode: ${config.nodeEnv}`);
     });
 
     const shutdown = async (signal) => {
       console.log(`Received ${signal}; shutting down gracefully`);
-      server.close(async (error) => {
+      server.close((error) => {
         if (error) {
           console.error("Error closing server:", error.message);
           process.exitCode = 1;
+          return;
         }
 
         process.exit(0);
@@ -42,7 +47,7 @@ const startServer = async () => {
       process.exit(1);
     });
   } catch (error) {
-    console.error("Server startup failed:", error.message);
+    console.error("✗ Server startup failed:", error.message);
     process.exit(1);
   }
 };

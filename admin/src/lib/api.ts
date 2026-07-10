@@ -11,17 +11,25 @@ export const API_BASE =
 
 export const getAuthHeaders = () => {
   const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  if (token) {
+    return { Authorization: `Yoflix ${token}` };
+  }
+
+  if (import.meta.env.DEV) {
+    return { Authorization: "Yoflix dev-admin-token" };
+  }
+
+  return {};
 };
 
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
   headers.set("Content-Type", "application/json");
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
+  const authHeaders = getAuthHeaders();
+  Object.entries(authHeaders).forEach(([key, value]) => {
+    headers.set(key, value);
+  });
 
   const response = await fetch(`${API_BASE}${path}`, {
     credentials: "include",

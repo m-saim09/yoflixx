@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 let databaseStatus = "disconnected";
 
+mongoose.set("strictQuery", true);
+
 mongoose.connection.on("connected", () => {
   databaseStatus = "connected";
 });
@@ -14,6 +16,8 @@ mongoose.connection.on("error", () => {
   databaseStatus = "error";
 });
 
+const isProduction = () => (process.env.NODE_ENV || "development").toLowerCase() === "production";
+
 const connectDatabase = async () => {
   if (mongoose.connection.readyState === 1) {
     databaseStatus = "connected";
@@ -25,29 +29,42 @@ const connectDatabase = async () => {
     return;
   }
 
-  const mongoUri = process.env.MONGODB_URI;
+  const mongoUri = String(process.env.MONGODB_URI || "").trim();
   if (!mongoUri) {
-    if ((process.env.NODE_ENV || "development").toLowerCase() === "production") {
-      throw new Error("MONGODB_URI is required in production");
-    }
-
-    console.warn("MONGODB_URI is not configured. The API will fail on data access until it is set.");
-    databaseStatus = "not-configured";
-    return;
+    throw new Error("MONGODB_URI is required");
   }
 
-  try {
-    await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 10000,
-      autoIndex: true,
-    });
+  const maxAttempts = isProduction() ? 5 : 2;
 
-    databaseStatus = "connected";
-    console.log("MongoDB Atlas connection established");
-  } catch (error) {
-    databaseStatus = "error";
-    console.error("MongoDB connection failed:", error.message);
-    throw error;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    databaseStatus = "connecting";
+
+    try {
+      await mongoose.connect(mongoUri, {
+        serverSelectionTimeoutMS: 10000,
+        autoIndex: true,
+        bufferCommands: false,
+      });
+
+      databaseStatus = "connected";
+      console.log("✓ MongoDB Connected");
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt === maxAttempts) {
+        databaseStatus = "error";
+        console.error(`✗ MongoDB connection failed after ${attempt} attempt(s): ${error.message}`);
+        if (isProduction()) {
+          throw new Error(`MongoDB connection failed after ${attempt} attempt(s): ${error.message}`);
+        }
+
+        console.warn("MongoDB connection unavailable. Continuing in development mode.");
+        return;
+      }
+
+      console.warn(`MongoDB connection attempt ${attempt}/${maxAttempts} failed: ${error.message}`);
+      await new Promise((resolve) => setTimeout(resolve, 2000 * attempt));
+    }
   }
 };
 

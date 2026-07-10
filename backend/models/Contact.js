@@ -19,6 +19,11 @@ const contactSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    selectedPlan: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PricingPlan",
+      required: false,
+    },
     message: {
       type: String,
       required: true,

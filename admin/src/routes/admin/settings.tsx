@@ -54,7 +54,7 @@ type SettingsResponse = {
   };
 };
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/admin/settings")({
   head: () => ({
     meta: [
       { title: "Website Settings — Yoflix Admin" },

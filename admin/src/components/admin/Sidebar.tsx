@@ -8,21 +8,23 @@ import {
   Tag,
   Settings,
   ShieldCheck,
+  CalendarClock,
 } from "lucide-react";
 
 const items = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/leads", label: "Leads", icon: Users },
-  { to: "/contacts", label: "Contacts", icon: MessageSquare },
-  { to: "/pricing", label: "Pricing Management", icon: Tag },
-  { to: "/settings", label: "Website Settings", icon: Settings },
+  { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/admin/leads", label: "Leads", icon: Users },
+  { to: "/admin/contacts", label: "Contacts", icon: MessageSquare },
+  { to: "/admin/consultations", label: "Consultation", icon: CalendarClock },
+  { to: "/admin/pricing", label: "Pricing Management", icon: Tag },
+  { to: "/admin/settings", label: "Website Settings", icon: Settings },
 ] as const;
 
 export function AdminSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <aside className="hidden lg:flex fixed inset-y-0 left-0 w-[280px] flex-col bg-sidebar border-r border-sidebar-border z-30">
+    <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col bg-sidebar border-r border-sidebar-border z-30">
       <div className="px-6 pt-7 pb-6">
         <div className="flex items-center gap-3">
           <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-primary-foreground font-display font-bold">

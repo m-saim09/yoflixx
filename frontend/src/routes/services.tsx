@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { Navbar, Footer, FinalCTA, PageHero, Services, HowItWorks } from "@/components/sections";
+import { Navbar, Footer, FinalCTA, PageHero, Services, HowItWorks, ServicesDecisionCTA } from "@/components/sections";
 import { TrendingUp, Clock, Award, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/services")({
@@ -41,6 +41,8 @@ function ServicesPage() {
       />
 
       <Services />
+
+      <ServicesDecisionCTA />
 
       {/* Benefits */}
       <section className="py-16 sm:py-24">

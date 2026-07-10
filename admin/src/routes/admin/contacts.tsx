@@ -23,7 +23,7 @@ type ContactsResponse = {
   };
 };
 
-export const Route = createFileRoute("/contacts")({
+export const Route = createFileRoute("/admin/contacts")({
   head: () => ({
     meta: [
       { title: "Contacts — Yoflix Admin" },

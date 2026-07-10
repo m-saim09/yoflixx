@@ -18,22 +18,23 @@ export function AdminShell({
   const pathname = useRouterState({ select: (state) => state.location.pathname });
 
   useEffect(() => {
-    if (pathname !== "/login" && !localStorage.getItem("admin_token")) {
+    const hasToken = Boolean(localStorage.getItem("admin_token"));
+    if (pathname !== "/login" && !hasToken && !import.meta.env.DEV) {
       navigate({ to: "/login" });
     }
   }, [navigate, pathname]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <AdminSidebar />
-      <div className="lg:pl-[280px]">
+      <div className="lg:pl-64">
         <AdminHeader title={title} description={description} />
         <motion.main
           key={title}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="px-6 lg:px-10 py-8 max-w-[1400px] mx-auto"
+          className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl mx-auto w-full"
         >
           {children}
         </motion.main>

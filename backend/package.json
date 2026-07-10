@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "build": "node --check server.js && node --check app.js && node --check config/db.js && node --check config/env.js && node --check models/Admin.js && node --check models/Contact.js && node --check models/Lead.js && node --check models/PricingPlan.js && node --check models/WebsiteSettings.js",
     "seed": "node seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "engines": {
     "node": ">=20.0.0"

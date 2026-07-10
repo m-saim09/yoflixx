@@ -42,7 +42,7 @@ function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
       localStorage.setItem("admin_token", response.token);
-      navigate({ to: "/" });
+      navigate({ to: "/admin" });
     } catch (error) {
       setStatus("error");
       setMessage(error instanceof Error ? error.message : "Unable to login.");

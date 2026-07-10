@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
+import { useEffect, useRef, useState, type ComponentType, type MouseEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Search,
@@ -24,6 +24,7 @@ import {
   Zap,
   Wallet,
   Sprout,
+  Globe,
   Check,
   Star,
   Quote,
@@ -35,6 +36,7 @@ import {
   ArrowRight,
   Menu,
   X,
+  ChevronDown,
 } from "lucide-react";
 import heroBg from "@/assets/hero-bg.png";
 import sphereImg from "@/assets/sphere.png";
@@ -172,7 +174,7 @@ export function Hero() {
         : "text-5xl leading-[1.05] sm:text-6xl lg:text-7xl";
   const heroBadge = hero.badge || "Trusted eBay Growth Partner";
   const primaryButtonText = hero.primaryButtonText || "Book Consultation";
-  const primaryButtonLink = hero.primaryButtonLink || "/contact";
+  const primaryButtonLink = hero.primaryButtonLink || "/consultation";
   const secondaryButtonText = hero.secondaryButtonText || "View eBay Plans";
   const secondaryButtonLink = hero.secondaryButtonLink || "/pricing";
   const chartHeights = [96, 136, 184, 238, 292, 340, 392];
@@ -295,7 +297,7 @@ export function Navbar() {
         </ul>
         <div className="flex items-center gap-2">
           <Link
-            to="/contact"
+            to="/consultation"
             className="hidden rounded-full gradient-primary px-5 py-2.5 text-sm font-medium text-white shadow-soft transition-transform hover:scale-[1.03] sm:inline-block"
           >
             Get Free Consultation
@@ -328,9 +330,9 @@ export function Navbar() {
               </li>
             ))}
             <Link
-              to="/contact"
+              to="/consultation"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full gradient-primary px-5 py-3 text-center text-sm font-medium text-white"
+              className="mt-2 inline-flex items-center justify-center rounded-full gradient-primary px-5 py-3 text-center text-sm font-medium text-white"
             >
               Get Free Consultation
             </Link>
@@ -806,8 +808,6 @@ export function Services() {
           }
           sub="Helping eBay sellers scale through account management, listing optimization, SEO, advertising, store management, and marketplace growth."
         />
-        {/* removed top eyebrow and inline CTA per design: CTA will be shown after cards */}
-
         <div className="mt-14 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => {
             const motionState = cardMotion[i] ?? { x: 0, y: 0, rotateX: 0, rotateY: 0, glowX: 0, glowY: 0 };
@@ -886,18 +886,131 @@ export function Services() {
   );
 }
 
+export function ServicesDecisionCTA() {
+  const { data: settings } = useWebsiteSettings();
+  const contactInfo = settings?.contactInfo ?? ({} as any);
+  const whatsappNumber = String(contactInfo.whatsappNumber || "15550102024").replace(/\D/g, "");
+  const whatsappLink = `https://wa.me/${whatsappNumber}`;
+
+  return (
+    <section className="w-full bg-white py-20 sm:py-24">
+      <div className="mx-auto flex max-w-[1400px] flex-col px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 28, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          className="relative overflow-hidden rounded-[28px] border border-[#E2E8F0] bg-[#F8FAFC] px-6 py-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:px-10 sm:py-10"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.06),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.05),transparent_22%)]" />
+          <div className="pointer-events-none absolute inset-0 opacity-60 [background-image:radial-gradient(rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:18px_18px]" />
+
+          <div className="relative grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-700 shadow-sm">
+                Not sure which service you need?
+              </span>
+              <h2 className="mt-6 text-3xl font-semibold tracking-tight text-[#0F172A] sm:text-4xl">
+                Get expert service guidance tailored to your eCommerce goals.
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
+                Share your store details and we’ll recommend the highest-impact services for your eBay, Walmart, or TikTok Shop business in one clear action plan.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 sm:items-center">
+              <motion.div
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 320, damping: 20 }}
+              >
+                <Link
+                  to="/consultation"
+                  className="group inline-flex min-w-[180px] items-center justify-center gap-2 rounded-full bg-[#0F172A] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(37,99,235,0.18)] transition duration-300 hover:bg-slate-950"
+                >
+                  <span>Get a free audit</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </motion.div>
+
+              <motion.a
+                href={whatsappLink}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                className="inline-flex min-w-[180px] items-center justify-center gap-2 rounded-full border border-[#0F172A] bg-white px-6 py-3.5 text-sm font-semibold text-[#0F172A] transition duration-300 hover:bg-[#0F172A] hover:text-white"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Chat on WhatsApp
+              </motion.a>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 /* ============ STATS ============ */
-type StatItem = { value: number; label: string; suffix: string };
+type StatItem = {
+  value: number;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+  icon: ComponentType<{ className?: string }>;
+};
 
 const STATS: StatItem[] = [
-  { value: 5000, label: "Listings Created", suffix: "+" },
-  { value: 200, label: "Happy Clients", suffix: "+" },
-  { value: 98, label: "Satisfaction Rate", suffix: "%" },
-  { value: 24, label: "Support", suffix: "/7" },
+  { value: 5200, label: "Satisfied Clients", suffix: "+", icon: Users },
+  { value: 5000000, label: "Revenue Generated", prefix: "$", suffix: "+", icon: Wallet },
+  { value: 6, label: "Years Experience", suffix: "+", icon: Sprout },
+  { value: 25, label: "Countries Served", suffix: "+", icon: Globe },
 ];
 
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
+}
+
+function formatStatValue(value: number, stat: StatItem) {
+  const base = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(value);
+
+  if (stat.value >= 1000000 && stat.label === "Revenue Generated") {
+    return `${stat.prefix ?? ""}${Math.round(stat.value / 1000000)}M${stat.suffix ?? ""}`;
+  }
+
+  return `${stat.prefix ?? ""}${base}${stat.suffix ?? ""}`;
+}
+
+function StatCard({ stat, count, index }: { stat: StatItem; count: number; index: number }) {
+  const showDivider = index > 0;
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, delay: index * 0.08, ease: "easeOut" }}
+      className={`relative flex flex-col items-center gap-4 border-t border-transparent px-6 py-10 transition-all duration-300 md:border-t-0`}
+    >
+      {showDivider ? (
+        <div
+          aria-hidden
+          className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 h-20 w-px bg-[#E2E8F0]"
+        />
+      ) : null}
+
+      <div className="flex items-center justify-center h-14 w-14 rounded-lg bg-[#EFF6FF] border border-[#DBEAFE]">
+        <stat.icon className="h-6 w-6 text-[#2563EB]" />
+      </div>
+
+      <div className="text-4xl font-semibold tracking-[-0.03em] text-[#0F172A] sm:text-5xl">
+        {formatStatValue(count, stat)}
+      </div>
+      <p className="text-sm text-slate-500">{stat.label}</p>
+    </motion.article>
+  );
 }
 
 export function Stats() {
@@ -907,7 +1020,7 @@ export function Stats() {
   useEffect(() => {
     if (!started) return;
 
-    const duration = 1200;
+    const duration = 1400;
     const startTime = performance.now();
     let frameId = 0;
 
@@ -927,36 +1040,251 @@ export function Stats() {
   }, [started]);
 
   return (
-    <section className="py-16">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="relative overflow-hidden rounded-[2.5rem] gradient-primary p-1 shadow-glow">
-          <div className="rounded-[calc(2.5rem-4px)] bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.25),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.2),transparent_50%)] px-6 py-12 sm:py-16">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              onViewportEnter={() => setStarted(true)}
-              className="grid grid-cols-2 gap-8 text-white sm:grid-cols-4"
-            >
-              {STATS.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="text-center"
-                >
-                  <div className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                    {counts[i]}
-                    {stat.suffix}
-                  </div>
-                  <div className="mt-2 text-sm text-white/80">{stat.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
+    <section className="w-full bg-white py-[100px] sm:py-[120px] px-0">
+      <div className="mx-auto flex max-w-[1400px] w-full flex-col px-0">
+        {/* Header and description removed per request */}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          onViewportEnter={() => setStarted(true)}
+          className="overflow-hidden rounded-none border border-[#E2E8F0] bg-[#F8FAFC] shadow-[0_24px_80px_rgba(15,23,42,0.06)]"
+        >
+          <div className="grid grid-cols-1 gap-0 md:grid-cols-2 xl:grid-cols-4">
+            {STATS.map((stat, i) => (
+              <StatCard key={stat.label} stat={stat} count={counts[i]} index={i} />
+            ))}
           </div>
-        </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+export function SellersMapLight() {
+  const locations = [
+    { label: "USA", x: 220, y: 170, anchor: "end" },
+    { label: "Canada", x: 280, y: 135, anchor: "start" },
+    { label: "UK", x: 570, y: 145, anchor: "start" },
+    { label: "Germany", x: 625, y: 165, anchor: "start" },
+    { label: "France", x: 620, y: 195, anchor: "end" },
+    { label: "UAE", x: 820, y: 235, anchor: "start" },
+    { label: "Australia", x: 1010, y: 280, anchor: "start" },
+  ];
+
+  const connections = [
+    { from: locations[0], to: locations[2] },
+    { from: locations[0], to: locations[5] },
+    { from: locations[2], to: locations[3] },
+    { from: locations[3], to: locations[4] },
+    { from: locations[5], to: locations[6] },
+  ];
+
+  return (
+    <section className="w-full bg-white py-20 sm:py-24">
+      <div className="mx-auto max-w-[1400px] px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mx-auto max-w-3xl text-center"
+        >
+          <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#2563EB]">Worldwide reach</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#0F172A] sm:text-4xl">
+            Trusted by sellers across global marketplaces
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+            A clean snapshot of the regions where Yoflix supports high-growth eCommerce brands with strategic marketplace expertise.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+          className="relative mt-10 overflow-hidden rounded-[28px] border border-[#E2E8F0] bg-[#F8FAFC] p-6 shadow-[0_24px_80px_rgba(15,23,42,0.06)]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.08),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.05),transparent_25%)]" />
+          <div className="pointer-events-none absolute inset-0 opacity-50 [background-image:radial-gradient(rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:18px_18px]" />
+
+          <svg viewBox="0 0 1100 360" className="relative z-10 h-[320px] w-full overflow-visible">
+            <defs>
+              <filter id="dotGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="0" stdDeviation="12" floodColor="#2563EB" floodOpacity="0.12" />
+              </filter>
+            </defs>
+            <rect x="0" y="0" width="1100" height="360" rx="28" fill="transparent" />
+            {connections.map((conn, index) => {
+              const path = `M ${conn.from.x} ${conn.from.y} C ${conn.from.x + 80} ${conn.from.y - 20}, ${conn.to.x - 80} ${conn.to.y + 20}, ${conn.to.x} ${conn.to.y}`;
+              return (
+                <motion.path
+                  key={`${conn.from.label}-${conn.to.label}`}
+                  d={path}
+                  fill="none"
+                  stroke="#2563EB"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeDasharray="6 8"
+                  initial={{ pathLength: 0, opacity: 0.3 }}
+                  whileInView={{ pathLength: 1, opacity: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
+                />
+              );
+            })}
+
+            {locations.map((location, index) => (
+              <motion.g
+                key={location.label}
+                initial={{ opacity: 0, scale: 0.7 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+              >
+                <circle cx={location.x} cy={location.y} r="14" fill="#EFF6FF" />
+                <circle cx={location.x} cy={location.y} r="6" fill="#0F172A" />
+                <text
+                  x={location.x + (location.anchor === "end" ? -18 : 18)}
+                  y={location.y + 4}
+                  textAnchor={location.anchor as "start" | "end"}
+                  fontSize="14"
+                  fontWeight="600"
+                  fill="#0F172A"
+                >
+                  {location.label}
+                </text>
+              </motion.g>
+            ))}
+          </svg>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ============ GLOBAL PRESENCE ============ */
+export function GlobalPresence() {
+  const locations = [
+    { label: "USA", x: 245, y: 182, anchor: "end" },
+    { label: "Canada", x: 310, y: 148, anchor: "start" },
+    { label: "UK", x: 600, y: 154, anchor: "start" },
+    { label: "Germany", x: 650, y: 172, anchor: "start" },
+    { label: "France", x: 645, y: 198, anchor: "end" },
+    { label: "Spain", x: 630, y: 225, anchor: "end" },
+    { label: "Italy", x: 688, y: 214, anchor: "start" },
+    { label: "Sweden", x: 700, y: 120, anchor: "start" },
+    { label: "UAE", x: 825, y: 240, anchor: "start" },
+    { label: "Saudi Arabia", x: 790, y: 222, anchor: "end" },
+    { label: "Australia", x: 1018, y: 278, anchor: "start" },
+  ];
+
+  const connections = [
+    { from: locations[0], to: locations[1] },
+    { from: locations[1], to: locations[2] },
+    { from: locations[2], to: locations[3] },
+    { from: locations[3], to: locations[4] },
+    { from: locations[4], to: locations[5] },
+    { from: locations[5], to: locations[6] },
+    { from: locations[3], to: locations[7] },
+    { from: locations[6], to: locations[8] },
+    { from: locations[8], to: locations[9] },
+    { from: locations[9], to: locations[10] },
+  ];
+
+  return (
+    <section className="w-full bg-white py-[100px] sm:py-[120px]">
+      <div className="mx-auto flex max-w-[1400px] flex-col px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-3xl text-center"
+        >
+          <p className="text-sm font-semibold uppercase tracking-[0.34em] text-[#2563EB]">Global Presence</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#0F172A] sm:text-4xl lg:text-5xl">
+            Helping sellers grow worldwide
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+            Supporting eBay, Walmart, and TikTok Shop sellers across international marketplaces with premium operations, strategy, and growth support.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+          className="relative mt-14 overflow-hidden rounded-[28px] border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-8 shadow-[0_24px_80px_rgba(15,23,42,0.05)] sm:px-8 lg:px-10 lg:py-10"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.12),transparent_45%)]" />
+          <div className="pointer-events-none absolute inset-0 opacity-60 [background-image:radial-gradient(rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:18px_18px]" />
+
+          <div className="relative z-10 mx-auto max-w-5xl">
+            <svg viewBox="0 0 1100 340" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="mapSoftGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#EFF6FF" />
+                  <stop offset="100%" stopColor="#F8FAFC" />
+                </linearGradient>
+                <filter id="mapShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="8" stdDeviation="14" floodColor="#0F172A" floodOpacity="0.04" />
+                </filter>
+              </defs>
+
+              <rect width="1100" height="340" rx="24" fill="url(#mapSoftGlow)" />
+
+              <g fill="#E8EEF7" filter="url(#mapShadow)">
+                <path d="M110 132c25-26 60-45 98-42 24 2 45 10 65 24 16 12 28 31 45 38 15 5 31 3 45-3 15-7 27-19 45-23 20-4 41 1 58 12 17 11 31 28 49 37 22 11 49 12 72 4 18-7 33-18 52-23 24-7 51-4 73 9 16 10 28 24 44 32 15 8 32 12 48 12v94H110z" />
+                <path d="M220 238c28-14 55-24 89-20 29 4 56 19 85 24 28 5 58 1 82-14 19-12 33-31 56-36 30-7 61 4 86 18 21 12 40 30 63 36 24 6 49 3 72-7 21-9 40-23 63-27 24-5 49-2 72 10 15 8 29 20 42 30v45H220z" />
+              </g>
+
+              {connections.map((conn, index) => {
+                const path = `M ${conn.from.x} ${conn.from.y} C ${conn.from.x + 60} ${conn.from.y - 20}, ${conn.to.x - 60} ${conn.to.y + 20}, ${conn.to.x} ${conn.to.y}`;
+                return (
+                  <motion.path
+                    key={`${conn.from.label}-${conn.to.label}`}
+                    d={path}
+                    stroke="#2563EB"
+                    strokeWidth="1.5"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeDasharray="4 6"
+                    initial={{ pathLength: 0, opacity: 0.4 }}
+                    whileInView={{ pathLength: 1, opacity: 1 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ duration: 0.9, delay: index * 0.06, ease: "easeOut" }}
+                  />
+                );
+              })}
+
+              {locations.map((location, index) => (
+                <motion.g
+                  key={location.label}
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.06, ease: "easeOut" }}
+                  whileHover={{ scale: 1.08, transition: { duration: 0.2 } }}
+                >
+                  <circle cx={location.x} cy={location.y} r="14" fill="#EFF6FF" />
+                  <motion.circle
+                    cx={location.x}
+                    cy={location.y}
+                    r="6"
+                    fill="#0F172A"
+                    animate={{ scale: [1, 1.16, 1], opacity: [0.9, 1, 0.9] }}
+                    transition={{ duration: 2.2, repeat: Infinity, delay: index * 0.12 }}
+                  />
+                  <circle cx={location.x} cy={location.y} r="16" fill="none" stroke="#BFDBFE" strokeWidth="2" />
+                </motion.g>
+              ))}
+            </svg>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1439,7 +1767,7 @@ export function Pricing() {
     const loadPricingPlans = async () => {
       try {
         const response = await apiRequest<{ data?: { pricingPlans?: PricingPlanOption[] } }>(
-          "/pricing",
+          "/pricing/get",
         );
         if (active) {
           setPricingPlans(response?.data?.pricingPlans ?? []);
@@ -1801,43 +2129,162 @@ export function FAQ() {
   );
 }
 
+/* ============ CONTACT HERO ============ */
+export function ContactHero() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative min-h-screen flex items-center">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/src/assets/contact-bg.png')",
+            backgroundColor: '#f0f4ff'
+          }}
+        />
+        
+        {/* Overlay Gradient - White from left to transparent (slightly lighter) */}
+        {/* no overlay on hero - let image show through */}
+
+        <div className="relative w-full py-16 sm:py-24 lg:py-32 px-6">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+              {/* Left Content */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7 }}
+                className="flex flex-col z-10"
+              >
+                {/* Badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="mb-6"
+                >
+                  <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-2 border border-blue-200">
+                    <div className="relative">
+                      <div className="h-2 w-2 bg-blue-600 rounded-full" />
+                      <div className="absolute inset-0 bg-blue-600/30 rounded-full blur-sm" />
+                    </div>
+                    <span className="text-xs font-medium text-blue-700">We're Here to Help</span>
+                  </div>
+                </motion.div>
+
+                {/* Heading */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.2 }}
+                  className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight mb-6 text-slate-900"
+                >
+                  Let's Grow Your{" "}
+                  <span className="block">eCommerce Business</span>
+                  <span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
+                    Together.
+                  </span>
+                </motion.h1>
+
+                {/* Subtitle */}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.3 }}
+                  className="text-base sm:text-lg text-slate-600 leading-relaxed mb-12 max-w-lg"
+                >
+                  Have questions or ready to get started? Our team is here to help you scale on eBay, Walmart & TikTok Shop.
+                </motion.p>
+
+                {/* Info Cards */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.7, delay: 0.4 }}
+                  className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-3"
+                >
+                  {[
+                    { icon: "💬", title: "Quick Response", desc: "We reply within 24 hours" },
+                    { icon: "🔒", title: "100% Confidential", desc: "Your information is always safe" },
+                    { icon: "👨‍💼", title: "Expert Support", desc: "Talk to real eCommerce specialists" },
+                  ].map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 + idx * 0.1, duration: 0.6 }}
+                      className="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-blue-100/50 shadow-lg hover:shadow-xl transition-all"
+                    >
+                      <div className="text-2xl mb-2">{item.icon}</div>
+                      <h3 className="text-sm font-semibold text-slate-900">{item.title}</h3>
+                      <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </motion.div>
+
+              {/* Right Side - Image Space */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="hidden lg:block h-full"
+              >
+                {/* Background image is displayed via absolute positioning */}
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ============ CONTACT ============ */
 export function Contact() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [phoneValue, setPhoneValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
   const [pricingPlans, setPricingPlans] = useState<PricingPlanOption[]>([]);
   const [pricingPlansLoading, setPricingPlansLoading] = useState(true);
-  const { data: settings } = useWebsiteSettings();
-  const contactInfo = settings?.contactInfo ?? {} as any;
 
+  useEffect(() => {
+    if (!message) return;
+
+    const timer = window.setTimeout(() => {
+      setMessage("");
+      setStatus("idle");
+    }, 8000);
+
+    return () => window.clearTimeout(timer);
+  }, [message, status]);
   useEffect(() => {
     let active = true;
 
     const loadPricingPlans = async () => {
       try {
         const response = await apiRequest<{ data?: { pricingPlans?: PricingPlanOption[] } }>(
-          "/pricing",
+          "/pricing/get",
         );
-        if (active) {
-          setPricingPlans(response?.data?.pricingPlans ?? []);
-        }
+        if (active) setPricingPlans(response?.data?.pricingPlans ?? []);
       } catch {
-        if (active) {
-          setPricingPlans([]);
-        }
+        if (active) setPricingPlans([]);
       } finally {
-        if (active) {
-          setPricingPlansLoading(false);
-        }
+        if (active) setPricingPlansLoading(false);
       }
     };
 
     void loadPricingPlans();
-
     return () => {
       active = false;
     };
   }, []);
+  const { data: settings } = useWebsiteSettings();
+  const contactInfo = settings?.contactInfo ?? ({} as any);
+  const mapQuery = encodeURIComponent(
+    `${contactInfo.officeAddress || "Lahore"}, ${contactInfo.officeCity || "Pakistan"}`
+  );
 
   const submitContact = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1846,22 +2293,39 @@ export function Contact() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const storeUrl = String(formData.get("storeUrl") || "").trim();
     const userMessage = String(formData.get("message") || "").trim();
-    const selectedPlan = String(formData.get("selectedPlan") || "").trim();
+    const phone = String(formData.get("phone") || "").replace(/\D/g, "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!phone || phone.length < 7) {
+      setStatus("error");
+      setMessage("Please enter a valid phone number.");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      setStatus("error");
+      setMessage("Please enter a valid email address.");
+      return;
+    }
 
     try {
       await apiRequest("/contacts", {
         method: "POST",
         body: JSON.stringify({
-          name: formData.get("name"),
-          email: formData.get("email"),
-          phone: formData.get("phone"),
-          selectedPlan,
-          message: storeUrl ? `Store URL: ${storeUrl}\n\n${userMessage}` : userMessage,
+          name: String(formData.get("name") || "").trim(),
+          email,
+          phone,
+          company: String(formData.get("company") || "").trim(),
+          selectedPlan: String(formData.get("selectedPlan") || "").trim(),
+          subject: String(formData.get("subject") || "").trim(),
+          message: userMessage,
         }),
       });
       form.reset();
+      setPhoneValue("");
+      setEmailValue("");
       setStatus("success");
       setMessage("Thanks — your message was saved and our team will reply soon.");
     } catch (error) {
@@ -1871,192 +2335,421 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionTitle
-          eyebrow="Contact"
-          title={
-            <>
-              Let's build your <span className="font-display italic gradient-text">growth</span>{" "}
-              together
-            </>
-          }
-        />
-        <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <section id="contact" className="relative overflow-hidden py-16 sm:py-24 lg:py-28">
+      <div
+        className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/src/assets/contact-bg.png')",
+          backgroundColor: "#FFFFFF",
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.06),transparent_38%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.08),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-white/90 to-transparent" />
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="mx-auto mb-12 max-w-3xl text-center sm:mb-16"
+        >
+          <h2 className="text-4xl font-extrabold tracking-tight text-[#0F172A] sm:text-5xl lg:text-6xl">
+            Get in Touch with <span className="text-[#2563EB]">Yoflix</span>
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-[#64748B] sm:text-lg">
+            Have questions or ready to grow your eCommerce business? Our team is here to help you scale on eBay, Walmart & TikTok Shop.
+          </p>
+        </motion.div>
+
+        <div className="mb-12 grid grid-cols-1 gap-8 lg:mb-16 lg:grid-cols-[1fr_1fr] lg:gap-0">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="space-y-4"
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="order-2 flex flex-col justify-between space-y-6 rounded-[24px] lg:rounded-tr-none lg:rounded-br-none border border-[#E2E8F0] bg-[#F8FAFC] p-8 shadow-[0_24px_80px_rgba(15,23,42,0.06)] sm:p-10 lg:order-1"
           >
-            {[
-                { icon: Mail, t: "Email", v: contactInfo.businessEmail || "hello@yoflix.com" },
-                { icon: Phone, t: "Phone", v: contactInfo.phoneNumber || "+1 (555) 010-2024" },
-                { icon: MapPin, t: "Location", v: contactInfo.officeAddress || "Remote — serving sellers globally" },
-              ].map((c) => (
-                <div key={c.t} className="glass-strong flex items-center gap-4 rounded-2xl p-5">
-                  <div className="grid h-12 w-12 place-items-center rounded-xl gradient-primary text-white">
-                    <c.icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                      {c.t}
-                    </div>
-                    <div className="font-medium">{c.v}</div>
-                  </div>
-                </div>
-              ))}
-            <div className="glass-strong rounded-2xl p-5">
-              <p className="text-sm text-muted-foreground">
-                Average reply time under{" "}
-                <span className="font-semibold text-foreground">2 hours</span> during business
-                hours.
+            <div>
+              <h3 className="mb-4 text-lg font-semibold text-[#0F172A]">Get in touch</h3>
+              <p className="mb-6 text-sm text-[#64748B]">
+                We'd love to hear from you. Reach out through any of the following channels.
               </p>
+
+              <div className="space-y-3">
+                <motion.div
+                  whileHover={{ y: -6, scale: 1.01 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="flex items-start gap-4 rounded-[20px] border border-[#E2E8F0] bg-white p-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)] transition-all duration-300 hover:border-[#2563EB] hover:shadow-[0_18px_40px_rgba(37,99,235,0.12)]"
+                >
+                  <motion.div
+                    whileHover={{ rotate: 8, scale: 1.08 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,_#0F172A_0%,_#1E3A8A_55%,_#2563EB_100%)] text-white shadow-[0_12px_30px_rgba(37,99,235,0.20)]"
+                  >
+                    <MapPin className="h-5 w-5" />
+                  </motion.div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                      Head Office
+                    </div>
+                    <div className="mt-1 text-sm font-medium text-[#0F172A]">
+                      {contactInfo.officeAddress || "Lahore"}
+                      <br />
+                      {contactInfo.officeCity || "Punjab, Pakistan"}
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  whileHover={{ y: -6, scale: 1.01 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="flex items-start gap-4 rounded-[20px] border border-[#E2E8F0] bg-white p-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)] transition-all duration-300 hover:border-[#2563EB] hover:shadow-[0_18px_40px_rgba(37,99,235,0.12)]"
+                >
+                  <motion.div
+                    whileHover={{ rotate: 8, scale: 1.08 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,_#0F172A_0%,_#1E3A8A_55%,_#2563EB_100%)] text-white shadow-[0_12px_30px_rgba(37,99,235,0.20)]"
+                  >
+                    <Mail className="h-5 w-5" />
+                  </motion.div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                      Email Us
+                    </div>
+                    <div className="mt-1">
+                      <div className="text-sm font-medium text-[#0F172A]">
+                        {contactInfo.businessEmail || "hello@yoflix.com"}
+                      </div>
+                      <div className="text-sm text-[#64748B]">
+                        {contactInfo.supportEmail || "support@yoflix.com"}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  whileHover={{ y: -6, scale: 1.01 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="flex items-start gap-4 rounded-[20px] border border-[#E2E8F0] bg-white p-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)] transition-all duration-300 hover:border-[#2563EB] hover:shadow-[0_18px_40px_rgba(37,99,235,0.12)]"
+                >
+                  <motion.div
+                    whileHover={{ rotate: 8, scale: 1.08 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,_#0F172A_0%,_#1E3A8A_55%,_#2563EB_100%)] text-white shadow-[0_12px_30px_rgba(37,99,235,0.20)]"
+                  >
+                    <Phone className="h-5 w-5" />
+                  </motion.div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                      Call Us
+                    </div>
+                    <div className="mt-1">
+                      <div className="text-sm font-medium text-[#0F172A]">
+                        {contactInfo.phoneNumber || "+1 (800) 632 5234"}
+                      </div>
+                      <div className="text-xs text-[#64748B]">
+                        Mon - Fri, 9:00 AM - 6:00 PM (EST)
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-[20px] border border-[#E2E8F0] bg-white shadow-[0_14px_34px_rgba(15,23,42,0.05)] ring-1 ring-slate-100">
+              <iframe
+                title="Yoflix location"
+                src={`https://www.google.com/maps?q=${mapQuery}&z=14&output=embed`}
+                className="h-64 w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+
+            <div>
+              <h3 className="mb-3 text-sm font-semibold text-[#0F172A]">Follow us</h3>
+              <div className="flex gap-3">
+                {[
+                  { icon: "f", label: "Facebook" },
+                  { icon: "t", label: "Twitter" },
+                  { icon: "l", label: "LinkedIn" },
+                  { icon: "y", label: "YouTube" },
+                ].map((social) => (
+                  <motion.a
+                    key={social.label}
+                    href="#"
+                    whileHover={{ y: -6, scale: 1.04, rotate: 5 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="grid h-10 w-10 place-items-center rounded-full border border-[#E2E8F0] bg-white text-[#2563EB] shadow-sm transition-all duration-300 hover:border-[#2563EB] hover:bg-[#2563EB] hover:text-white hover:shadow-[0_10px_24px_rgba(37,99,235,0.18)]"
+                    aria-label={social.label}
+                  >
+                    {social.icon === "f" && <Mail className="h-4 w-4" />}
+                    {social.icon === "t" && <MessageSquare className="h-4 w-4" />}
+                    {social.icon === "l" && <Users className="h-4 w-4" />}
+                    {social.icon === "y" && <Activity className="h-4 w-4" />}
+                  </motion.a>
+                ))}
+              </div>
             </div>
           </motion.div>
+
           <motion.form
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             onSubmit={submitContact}
-            className="glass-strong rounded-3xl p-8"
+            className="order-1 rounded-[24px] lg:rounded-tl-none lg:rounded-bl-none border border-[#E2E8F0] bg-white p-8 shadow-[0_30px_90px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 sm:p-10 lg:order-2"
           >
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Field label="Name" name="name" placeholder="Jane Doe" required minLength={2} />
-              <Field
-                label="Email"
-                name="email"
-                type="email"
-                placeholder="jane@store.com"
-                required
-              />
+            <h3 className="mb-6 text-lg font-semibold text-[#0F172A]">Send us a message</h3>
+
+            <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your name"
+                  required
+                  minLength={2}
+                  className="mt-2 w-full rounded-[14px] border border-[#CBD5E1] bg-white px-4 py-2.75 text-base text-[#0F172A] placeholder:text-[#94A3B8] placeholder:transition-all placeholder:duration-300 focus:placeholder:translate-x-[-2px] outline-none shadow-[0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-300 focus:border-[#2563EB] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.10)]"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                  Company
+                </label>
+                <input
+                  type="text"
+                  name="company"
+                  placeholder="Your company"
+                  className="mt-2 w-full rounded-[14px] border border-[#CBD5E1] bg-white px-4 py-2.75 text-base text-[#0F172A] placeholder:text-[#94A3B8] placeholder:transition-all placeholder:duration-300 focus:placeholder:translate-x-[-2px] outline-none shadow-[0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-300 focus:border-[#2563EB] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.10)]"
+                />
+              </div>
             </div>
-            <div className="mt-4">
-              <Field
-                label="Phone"
-                name="phone"
-                type="tel"
-                placeholder="+1 (555) 010-2024"
-                required
-              />
+
+            <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Your phone"
+                  required
+                  value={phoneValue}
+                  onChange={(event) => setPhoneValue(event.target.value.replace(/\D/g, "").slice(0, 15))}
+                  className="mt-2 w-full rounded-[14px] border border-[#CBD5E1] bg-white px-4 py-2.75 text-base text-[#0F172A] placeholder:text-[#94A3B8] placeholder:transition-all placeholder:duration-300 focus:placeholder:translate-x-[-2px] outline-none shadow-[0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-300 focus:border-[#2563EB] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.10)]"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  placeholder="Your email"
+                  required
+                  value={emailValue}
+                  onChange={(event) => setEmailValue(event.target.value.trim())}
+                  className="mt-2 w-full rounded-[14px] border border-[#CBD5E1] bg-white px-4 py-2.75 text-base text-[#0F172A] placeholder:text-[#94A3B8] placeholder:transition-all placeholder:duration-300 focus:placeholder:translate-x-[-2px] outline-none shadow-[0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-300 focus:border-[#2563EB] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.10)]"
+                />
+              </div>
             </div>
-            <div className="mt-4">
-              <label className="text-xs font-medium text-muted-foreground">Select Plan</label>
+
+            <div className="mb-4">
+              <label className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                Choose Plan
+              </label>
               <select
                 name="selectedPlan"
                 required
-                disabled={pricingPlansLoading}
-                className="mt-1.5 w-full rounded-2xl border border-white/60 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-70"
+                className="mt-2 w-full rounded-[14px] border border-[#CBD5E1] bg-white px-4 py-2.75 text-base text-[#0F172A] placeholder:text-[#94A3B8] outline-none shadow-[0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-300 focus:border-[#2563EB]"
+                defaultValue={pricingPlans.length ? pricingPlans[0]._id || pricingPlans[0].slug || "" : ""}
               >
-                <option value="">
-                  {pricingPlansLoading ? "Loading plans..." : "Choose a plan"}
-                </option>
-                {(pricingPlans.length
-                  ? pricingPlans
-                  : [{ _id: "custom", title: "Custom Project" }]
-                ).map((plan) => (
-                  <option
-                    key={plan._id || plan.slug || plan.title}
-                    value={plan.title || "Custom Project"}
-                  >
-                    {plan.title || "Custom Project"}
+                {pricingPlansLoading ? (
+                  <option value="" disabled>
+                    Loading plans...
+                  </option>
+                ) : null}
+                {pricingPlans.map((plan) => (
+                  <option key={plan._id} value={plan._id || plan.slug || ""}>
+                    {plan.title}
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-muted-foreground">
-                These options are pulled from the pricing plans created in the admin panel.
-              </p>
             </div>
-            <div className="mt-4">
-              <label className="text-xs font-medium text-muted-foreground">Message</label>
+            <div className="mb-4">
+              <label className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                Subject
+              </label>
+              <input
+                type="text"
+                name="subject"
+                placeholder="How can we help you?"
+                required
+                className="mt-2 w-full rounded-[14px] border border-[#CBD5E1] bg-white px-4 py-2.75 text-base text-[#0F172A] placeholder:text-[#94A3B8] placeholder:transition-all placeholder:duration-300 focus:placeholder:translate-x-[-2px] outline-none shadow-[0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-300 focus:border-[#2563EB] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.10)]"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="text-xs font-semibold uppercase tracking-[0.22em] text-[#64748B]">
+                Message
+              </label>
               <textarea
                 name="message"
                 rows={5}
+                placeholder="Type your message here..."
                 required
                 minLength={10}
-                placeholder="Tell us about your store & goals…"
-                className="mt-1.5 w-full resize-none rounded-2xl border border-white/60 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/15"
+                className="mt-2 w-full rounded-[14px] border border-[#CBD5E1] bg-white px-4 py-2.75 text-base text-[#0F172A] placeholder:text-[#94A3B8] placeholder:transition-all placeholder:duration-300 focus:placeholder:translate-x-[-2px] outline-none resize-none shadow-[0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-300 focus:border-[#2563EB] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.10)]"
               />
             </div>
+
             <button
+              type="submit"
               disabled={status === "loading"}
-              className="mt-6 w-full rounded-full gradient-primary px-5 py-3.5 text-sm font-medium text-white shadow-glow transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded-[14px] border border-[#2563EB] bg-[linear-gradient(135deg,_#0F172A_0%,_#1E3A8A_55%,_#2563EB_100%)] px-6 py-4 text-base font-semibold text-white shadow-[0_18px_50px_rgba(37,99,235,0.24)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-[0_22px_60px_rgba(37,99,235,0.28)] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:scale-100"
             >
-              {status === "loading" ? "Sending..." : "Send Message"}
+              <span>{status === "loading" ? "Sending..." : "Send Message"}</span>
+              {status !== "loading" && <ArrowRight className="h-4 w-4" />}
             </button>
-            {message && (
-              <p
-                className={`mt-4 text-sm ${status === "error" ? "text-ebay-red" : "text-ebay-green"}`}
-              >
-                {message}
-              </p>
-            )}
+
+            <div className="pointer-events-none fixed right-4 bottom-4 z-[60] max-w-sm">
+              <AnimatePresence mode="wait">
+                {message && (
+                  <motion.div
+                    key={`${status}-${message}`}
+                    initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 12, scale: 0.98 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    role="alert"
+                    aria-live="polite"
+                    className={`flex items-start gap-2 rounded-[14px] border px-4 py-3 text-sm shadow-[0_20px_50px_rgba(15,23,42,0.16)] ${
+                      status === "error"
+                        ? "border-rose-200 bg-rose-50 text-rose-700"
+                        : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    }`}
+                  >
+                    {status === "error" ? (
+                      <X className="mt-0.5 h-4 w-4 shrink-0" />
+                    ) : (
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                    )}
+                    <span>{message}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </motion.form>
         </div>
       </div>
     </section>
   );
 }
-function Field({
-  label,
-  ...rest
-}: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <div>
-      <label className="text-xs font-medium text-muted-foreground">{label}</label>
-      <input
-        {...rest}
-        className="mt-1.5 w-full rounded-2xl border border-white/60 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/15"
-      />
-    </div>
-  );
-}
 
 /* ============ FINAL CTA ============ */
 export function FinalCTA() {
+  const { data: settings } = useWebsiteSettings();
+  const contactInfo = settings?.contactInfo ?? ({} as any);
+  const whatsappNumber = String(contactInfo.whatsappNumber || "15550102024").replace(/\D/g, "");
+  const whatsappLink = `https://wa.me/${whatsappNumber}`;
+
   return (
-    <section className="relative px-6 py-20">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] gradient-primary p-12 text-center text-white shadow-glow sm:p-20">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.2),transparent_40%)]" />
-        <motion.img
-          src={sphereImg}
-          alt=""
-          aria-hidden
-          width={200}
-          height={200}
-          className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 opacity-80 mix-blend-screen sm:h-56 sm:w-56"
-          animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.img
-          src={sphereImg}
-          alt=""
-          aria-hidden
-          width={140}
-          height={140}
-          className="pointer-events-none absolute -bottom-6 -left-6 h-28 w-28 opacity-70 mix-blend-screen sm:h-40 sm:w-40"
-          animate={{ y: [0, 18, 0] }}
-          transition={{ duration: 7, repeat: Infinity }}
-        />
-        <div className="relative">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5" /> Limited consultation slots this month
-          </span>
-          <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-medium tracking-tight sm:text-6xl">
-            Ready To Scale Your eBay <span className="font-display italic">Business?</span>
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-white/80">
-            Book a free 30-minute consultation. No pressure, no fluff — just a clear plan.
-          </p>
-          <Link
-            to="/contact"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-semibold text-primary shadow-soft transition-transform hover:scale-[1.04]"
-          >
-            Book Free Consultation <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+    <section className="relative w-full bg-white py-20 sm:py-24 lg:py-28">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-center px-0 sm:px-0 lg:px-0">
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full overflow-hidden rounded-[28px] border border-slate-200 bg-[#F8FAFC] px-6 py-10 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:px-10 sm:py-14 lg:px-14 lg:py-16"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(37,99,235,0.08),transparent_34%),radial-gradient(circle_at_100%_0%,rgba(37,99,235,0.06),transparent_28%)]" />
+          <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:radial-gradient(rgba(15,23,42,0.08)_1px,transparent_1px)] [background-size:16px_16px]" />
+          <div className="pointer-events-none absolute left-1/2 top-4 h-24 w-24 -translate-x-1/2 rounded-full bg-blue-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-6 right-8 h-28 w-28 rounded-full bg-blue-500/10 blur-3xl" />
+
+          <div className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+            <div className="max-w-2xl">
+              <motion.span
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: 0.1 }}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-700"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+                Let&apos;s grow together
+              </motion.span>
+
+              <motion.h2
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, delay: 0.16 }}
+                className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.75rem] lg:leading-[1.05]"
+              >
+                Ready to Scale Your eCommerce Business?
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, delay: 0.22 }}
+                className="mt-4 max-w-xl text-base leading-8 text-slate-600 sm:text-lg"
+              >
+                Whether you&apos;re selling on eBay, Walmart Marketplace, or TikTok Shop, Yoflix provides expert account management, listing optimization, marketplace growth, and long-term business support to help you achieve sustainable success.
+              </motion.p>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 28 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.28 }}
+              className="relative flex flex-col gap-3 sm:flex-row sm:justify-start lg:flex-col lg:items-end"
+            >
+              <div className="pointer-events-none absolute left-0 top-1/2 h-14 w-36 -translate-y-1/2 rounded-full bg-blue-500/20 blur-3xl sm:left-2" />
+              <motion.div
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                animate={{ scale: [1, 1.008, 1] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Link
+                  to="/consultation"
+                  className="group relative inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_12px_35px_rgba(15,23,42,0.18)] transition-all duration-300 hover:bg-slate-800"
+                >
+                  <span>Book Free Consultation</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </motion.div>
+
+              <motion.a
+                href={whatsappLink}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.03, y: -2, backgroundColor: "#0F172A", color: "#FFFFFF" }}
+                whileTap={{ scale: 0.98 }}
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3.5 text-sm font-semibold text-slate-900 transition-all duration-300 hover:border-slate-900 hover:bg-slate-900 hover:text-white"
+              >
+                <MessageSquare className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                <span>Chat on WhatsApp</span>
+              </motion.a>
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -11,7 +11,7 @@ export function AdminHeader({ title, description }: { title: string; description
   const submitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const query = search.trim();
-    navigate({ to: "/leads", search: query ? { search: query } : {} });
+    navigate({ to: "/admin/leads", search: query ? { search: query } : {} });
   };
 
   const logout = async () => {

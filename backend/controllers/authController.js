@@ -3,8 +3,13 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { AppError } = require("../utils/appError");
 const { clearAuthCookie, generateToken, setAuthCookie } = require("../services/tokenService");
 
+const isDevOverrideEnabled = () => {
+  const isProduction = (process.env.NODE_ENV || "development").toLowerCase() === "production";
+  return !isProduction && String(process.env.DEV_OVERRIDE || "").toLowerCase() === "true";
+};
+
 const sanitizeAdmin = (admin) => ({
-  id: admin._id,
+  id: admin._id || admin.id,
   name: admin.name,
   email: admin.email,
   role: admin.role,
@@ -18,6 +23,32 @@ const loginAdmin = asyncHandler(async (req, res) => {
 
   if (!email || !password) {
     throw new AppError("Email and password are required", 400);
+  }
+
+  if (isDevOverrideEnabled()) {
+    const token = generateToken({
+      _id: "dev",
+      email,
+      role: "admin",
+      name: "Developer Admin",
+    });
+    setAuthCookie(res, token);
+
+    return res.json({
+      success: true,
+      message: "Login successful",
+      token,
+      data: {
+        admin: {
+          id: "dev",
+          name: "Developer Admin",
+          email,
+          role: "admin",
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+        },
+      },
+    });
   }
 
   const admin = await Admin.findOne({ email }).select("+password");
@@ -47,6 +78,23 @@ const loginAdmin = asyncHandler(async (req, res) => {
 });
 
 const getAdminProfile = asyncHandler(async (req, res) => {
+  if (req.admin?.isDevOverride) {
+    return res.json({
+      success: true,
+      message: "Profile fetched successfully",
+      data: {
+        admin: {
+          id: req.admin.id,
+          name: "Developer Admin",
+          email: req.admin.email,
+          role: req.admin.role,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+        },
+      },
+    });
+  }
+
   const admin = await Admin.findById(req.admin.id);
 
   if (!admin) {

@@ -35,7 +35,7 @@ import {
   trafficSources,
 } from "@/lib/admin/data";
 
-export const Route = createFileRoute("/analytics")({
+export const Route = createFileRoute("/admin/analytics")({
   head: () => ({
     meta: [
       { title: "Analytics — Yoflix Admin" },

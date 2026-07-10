@@ -11,11 +11,11 @@ const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", getPublicPricingPlans);
+router.get("/get", getPublicPricingPlans);
 router.get("/admin", protect, getAdminPricingPlans);
-router.post("/", protect, createPricingPlan);
-router.patch("/:id", protect, updatePricingPlan);
-router.patch("/:id/toggle", protect, togglePricingPlanStatus);
-router.delete("/:id", protect, deletePricingPlan);
+router.post("/post", protect, createPricingPlan);
+router.patch("/update/:id", protect, updatePricingPlan);
+router.patch("/toggle/:id", protect, togglePricingPlanStatus);
+router.delete("/delete/:id", protect, deletePricingPlan);
 
 module.exports = router;

@@ -47,7 +47,7 @@ type LeadsListResponse = {
 
 const MAX_LEADS_LIMIT = 100;
 
-export const Route = createFileRoute("/leads")({
+export const Route = createFileRoute("/admin/leads")({
   head: () => ({
     meta: [
       { title: "Leads — Yoflix Admin" },

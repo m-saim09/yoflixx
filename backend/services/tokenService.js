@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+const getJwtSecret = () => process.env.JWT_SECRET || "dev-jwt-secret";
+
 const getCookieOptions = () => {
   const isProduction = process.env.NODE_ENV === "production";
   const crossOrigin = Boolean(process.env.CLIENT_URL);
@@ -19,7 +21,7 @@ const generateToken = (admin) =>
       email: admin.email,
       role: admin.role,
     },
-    process.env.JWT_SECRET,
+    getJwtSecret(),
     { expiresIn: "7d" }
   );
 

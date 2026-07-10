@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { Navbar, Footer, FinalCTA, PageHero, Stats, WhyChoose } from "@/components/sections";
+import { Navbar, Footer, FinalCTA, PageHero, Stats, SellersMapLight, WhyChoose } from "@/components/sections";
 import { Target, Eye, Heart, Shield, Sparkles, Users } from "lucide-react";
 import sphereImg from "@/assets/sphere.png";
 import hero3d from "@/assets/hero-3d.png";
@@ -103,6 +103,7 @@ function AboutPage() {
       </section>
 
       <Stats />
+      <SellersMapLight />
 
       {/* Team */}
       <section className="py-16 sm:py-24">

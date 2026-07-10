@@ -53,11 +53,11 @@ export function PricingCard({
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
-        className="relative overflow-hidden rounded-[30px] border border-white/70 bg-white/90 shadow-[0_24px_80px_-28px_rgba(15,23,42,0.25)] backdrop-blur"
+        className="relative overflow-hidden rounded-[30px] border border-slate-200 bg-white/95 shadow-[0_24px_80px_-28px_rgba(15,23,42,0.2)] backdrop-blur"
       >
         {isHighlighted ? (
           <>
-            <div className="absolute inset-0 rounded-[30px] bg-[linear-gradient(135deg,#6D5DFC_0%,#8B5CF6_45%,#C084FC_100%)] opacity-95" />
+            <div className="absolute inset-0 rounded-[30px] bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_55%,#3b82f6_100%)] opacity-95" />
             <div className="absolute inset-x-4 inset-y-4 rounded-[24px] border border-white/20" />
           </>
         ) : null}
@@ -85,7 +85,7 @@ export function PricingCard({
             </div>
           </div>
 
-          <div className="mt-7 flex items-end gap-2">
+          <div className="mt-8 flex items-end gap-2">
             <span className="text-5xl font-semibold tracking-tight">{price}</span>
             <span className={`pb-1 text-sm ${isHighlighted ? "text-white/70" : "text-muted-foreground"}`}>/{billingType}</span>
           </div>
@@ -116,7 +116,7 @@ export function PricingCard({
           ) : (
             <button
               type="button"
-              className={`mt-6 inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-medium transition-all ${isHighlighted ? "bg-white text-slate-900 shadow-[0_12px_30px_-8px_rgba(15,23,42,0.35)]" : "border border-primary/25 bg-white/70 text-primary hover:bg-white"}`}
+              className={`mt-6 inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-medium transition-all ${isHighlighted ? "bg-white text-slate-900 shadow-[0_12px_30px_-8px_rgba(15,23,42,0.35)]" : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"}`}
             >
               {plan.buttonText || "Choose Plan"}
             </button>

@@ -8,18 +8,28 @@ const errorHandler = (error, req, res, next) => {
   const statusCode = error.statusCode || error.status || 500;
   const isValidationError = error.name === "ValidationError";
   const isProduction = process.env.NODE_ENV === "production";
+  const errors = error.errors || {};
 
   if (error.message === "CORS origin not allowed") {
     return res.status(403).json({
       success: false,
       message: "Origin not allowed by CORS policy",
+      data: null,
+      errors: {},
     });
   }
 
   if (isValidationError) {
     return res.status(400).json({
       success: false,
-      message: Object.values(error.errors)[0]?.message || "Validation failed",
+      message: Object.values(error.errors || {})[0]?.message || "Validation failed",
+      data: null,
+      errors: Object.fromEntries(
+        Object.entries(error.errors || {}).map(([field, validationError]) => [
+          field,
+          validationError?.message || validationError,
+        ])
+      ),
     });
   }
 
@@ -27,6 +37,8 @@ const errorHandler = (error, req, res, next) => {
     return res.status(409).json({
       success: false,
       message: "A record with this value already exists",
+      data: null,
+      errors: errors || { duplicate: "A record with this value already exists" },
     });
   }
 
@@ -42,6 +54,8 @@ const errorHandler = (error, req, res, next) => {
       isProduction && statusCode >= 500
         ? "Internal server error"
         : error.message || "Internal server error",
+    data: null,
+    errors,
   });
 };
 

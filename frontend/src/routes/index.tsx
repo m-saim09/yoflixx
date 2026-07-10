@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Navbar, Hero, LogoStrip, CoreExpertise, MarketplaceSupport, Services, Stats, TestimonialsMarquee, Reviews, OurWorkingProcess, WhyChoose, Pricing, FinalCTA, Footer,
 } from "@/components/sections";
+import { GlobalPresence as MapGlobalPresence } from "../../map/src/components/global-presence";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,6 +27,7 @@ function Index() {
       <CoreExpertise />
       <MarketplaceSupport />
       <Stats />
+      <MapGlobalPresence />
       <TestimonialsMarquee />
       <Reviews />
       <WhyChoose />

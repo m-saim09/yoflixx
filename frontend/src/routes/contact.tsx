@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Navbar, Footer, FinalCTA, PageHero, Contact, FAQ } from "@/components/sections";
+import { Navbar, Footer, Contact } from "@/components/sections";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -16,16 +16,13 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   return (
     <main className="relative overflow-hidden">
-      <Navbar />
-      <PageHero
-        eyebrow="Contact"
-        title="Let's build your growth"
-        accent="together"
-        sub="Book a free consultation or send us a message — we usually reply within 2 hours."
+      <div
+        className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/src/assets/contact-bg.png')", backgroundColor: "#f3f7ff" }}
       />
+      {/* decorative radial removed to show original background */}
+      <Navbar />
       <Contact />
-      <FAQ />
-      <FinalCTA />
       <Footer />
     </main>
   );
