@@ -20,6 +20,7 @@ type Lead = {
   projectType?: string;
   requirements?: string;
   source?: string;
+  isRead?: boolean;
 };
 
 type LeadDetail = Lead;
@@ -218,12 +219,15 @@ function LeadsPage() {
 
   // derive read IDs from backend data whenever leads update
   useEffect(() => {
-    setReadLeadIds(leads.filter((l) => (l as any).isRead).map((l) => l._id));
+    setReadLeadIds(leads.filter((l) => l.isRead).map((l) => l._id));
   }, [leads]);
 
   return (
-    <AdminShell title="Leads" description="Track, filter and convert your pipeline.">
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+    <AdminShell
+      title="Leads"
+      description="Track, filter and convert your pipeline with a clearer operating view."
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
           label="Total Leads"
           value={totalLeads.toLocaleString()}
@@ -249,19 +253,19 @@ function LeadsPage() {
 
       <Card className="mt-4">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 flex-1 min-w-[200px]">
+          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl border border-border bg-background px-3 py-2 shadow-sm">
             <Search className="h-4 w-4 text-muted-foreground" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by name, email, company..."
-              className="bg-transparent text-sm outline-none flex-1 placeholder:text-muted-foreground"
+              className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>
           <select
             value={plan}
             onChange={(e) => setPlan(e.target.value)}
-            className="rounded-xl border border-border bg-background px-3 py-2 text-sm"
+            className="rounded-2xl border border-border bg-background px-3 py-2 text-sm shadow-sm"
           >
             {[
               "All",
@@ -275,17 +279,17 @@ function LeadsPage() {
         </div>
       </Card>
 
-      <Card className="mt-4 p-0 overflow-hidden">
+      <Card className="mt-4 overflow-hidden p-0">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-full text-sm">
             <thead>
-              <tr className="text-left text-xs text-muted-foreground border-b border-border bg-secondary/40">
-                <th className="px-5 py-3 font-medium">Name</th>
-                <th className="py-3 font-medium">Email</th>
-                <th className="py-3 font-medium">Company</th>
-                <th className="py-3 font-medium">Plan</th>
-                <th className="py-3 font-medium">Created</th>
-                <th className="py-3 font-medium px-5 text-right">Actions</th>
+              <tr className="border-b border-border/70 bg-secondary/40 text-left text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                <th className="px-5 py-2 font-medium">Name</th>
+                <th className="py-2 font-medium">Email</th>
+                <th className="py-2 font-medium">Company</th>
+                <th className="py-2 font-medium">Plan</th>
+                <th className="py-2 font-medium">Created</th>
+                <th className="px-5 py-2 text-right font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -315,27 +319,27 @@ function LeadsPage() {
                 filteredLeads.map((l) => (
                   <tr
                     key={l.id}
-                    className={`border-b border-border/60 last:border-0 ${readLeadIds.includes(l.id) ? "bg-white" : "bg-slate-50"}`}
+                    className={`border-b border-border/60 last:border-0 transition hover:bg-secondary/40 ${readLeadIds.includes(l.id) ? "bg-white/70" : "bg-violet-50/40"}`}
                   >
                     <td
-                      className={`px-5 py-3 ${readLeadIds.includes(l.id) ? "font-medium" : "font-semibold text-slate-950"}`}
+                      className={`px-5 py-2 ${readLeadIds.includes(l.id) ? "font-medium" : "font-semibold text-slate-950"}`}
                     >
                       {l.name}
                     </td>
                     <td
-                      className={`py-3 ${readLeadIds.includes(l.id) ? "text-muted-foreground" : "text-foreground/90 font-medium"}`}
+                      className={`py-2 ${readLeadIds.includes(l.id) ? "text-muted-foreground" : "text-foreground/90 font-medium"}`}
                     >
                       {l.email}
                     </td>
-                    <td className="py-3">{l.company}</td>
-                    <td className="py-3">
+                    <td className="py-2">{l.company}</td>
+                    <td className="py-2">
                       <Badge tone="primary">{l.plan}</Badge>
                     </td>
-                    <td className="py-3 text-muted-foreground">{l.created}</td>
-                    <td className="py-3 px-5 text-right">
+                    <td className="py-2 text-muted-foreground">{l.created}</td>
+                    <td className="px-5 py-2 text-right">
                       <button
                         onClick={() => handleOpenLeadDetails(l.id)}
-                        className="text-primary text-xs font-medium"
+                        className="text-sm font-semibold text-primary"
                       >
                         View
                       </button>
@@ -349,12 +353,15 @@ function LeadsPage() {
 
       <div className="mt-4">
         <Card>
-          <h3 className="font-display font-semibold mb-3">Recent Lead Activity</h3>
+          <h3 className="mb-3 font-display text-lg font-semibold">Recent Lead Activity</h3>
           <ul className="space-y-3 text-sm">
             {recentActivities.map((activity, index) => (
-              <li key={index} className="flex gap-3">
+              <li
+                key={index}
+                className="flex flex-wrap items-center gap-3 rounded-2xl border border-border/70 bg-secondary/20 px-3 py-3"
+              >
                 <Badge tone={statusTone[activity.status] ?? "neutral"}>{activity.status}</Badge>
-                <span>
+                <span className="text-muted-foreground">
                   {activity.description} — {activity.time}
                 </span>
               </li>
@@ -441,8 +448,8 @@ function LeadsPage() {
                         </div>
                       </div>
 
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
                           <div className="text-xs uppercase tracking-[0.28em] text-slate-500">
                             Full name
                           </div>

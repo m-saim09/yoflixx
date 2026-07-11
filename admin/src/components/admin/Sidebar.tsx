@@ -1,14 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  LayoutDashboard,
   BarChart3,
-  Users,
-  MessageSquare,
-  Tag,
-  Settings,
-  ShieldCheck,
   CalendarClock,
+  LayoutDashboard,
+  MessageSquare,
+  Settings,
+  Tag,
+  Users,
+  X,
 } from "lucide-react";
 
 const items = [
@@ -21,40 +21,42 @@ const items = [
   { to: "/admin/settings", label: "Website Settings", icon: Settings },
 ] as const;
 
-export function AdminSidebar() {
+export function AdminSidebar({ open = false, onClose }: { open?: boolean; onClose?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  return (
-    <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col bg-sidebar border-r border-sidebar-border z-30">
-      <div className="px-6 pt-7 pb-6">
-        <div className="flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-primary-foreground font-display font-bold">
-            Y
-          </div>
-          <div className="min-w-0">
-            <div className="font-display font-bold text-base leading-tight text-sidebar-foreground">
-              Yoflix Admin
-            </div>
-            <div className="text-xs text-muted-foreground">Management Panel</div>
+
+  const content = (
+    <div className="flex h-full flex-col bg-background">
+      <div className="flex items-center justify-between px-6 py-6">
+        <div className="min-w-0">
+          <div className="font-display text-2xl font-semibold tracking-tight text-slate-950">
+            Yoflix Admin
           </div>
         </div>
+        <button
+          onClick={onClose}
+          className="rounded-[12px] border border-[#ECEEF3] bg-white p-2 text-foreground lg:hidden"
+          aria-label="Close navigation"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
-      <nav className="flex-1 px-3 space-y-1">
+      <nav className="flex-1 space-y-2 px-3">
         {items.map((it) => {
-          const active = pathname === it.to;
+          const active = pathname === it.to || (it.to !== "/admin" && pathname.startsWith(it.to));
           const Icon = it.icon;
           return (
-            <Link key={it.to} to={it.to} className="block">
+            <Link key={it.to} to={it.to} className="block" onClick={onClose}>
               <motion.div
-                whileHover={{ x: 2 }}
+                whileHover={{ x: 2, scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                className={`relative flex h-11 items-center gap-3 rounded-[12px] px-4 text-sm font-medium transition-all ${
                   active
-                    ? "bg-primary text-primary-foreground shadow-[0_8px_20px_-8px_rgba(109,93,252,0.5)]"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-sm"
+                    : "text-slate-700 hover:bg-white hover:text-slate-900"
                 }`}
               >
-                <Icon className="h-[18px] w-[18px] shrink-0" />
+                <Icon className="h-5 w-5 shrink-0" />
                 <span className="truncate">{it.label}</span>
               </motion.div>
             </Link>
@@ -62,25 +64,40 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <div className="p-3 space-y-3">
-        <div className="rounded-2xl border border-sidebar-border bg-secondary/60 p-3">
-          <div className="flex items-center gap-2 text-xs font-semibold text-secondary-foreground">
-            <ShieldCheck className="h-4 w-4" /> Protected Session
-          </div>
-          <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">
-            End-to-end encrypted. Expires in 42 min.
-          </p>
-        </div>
-        <div className="flex items-center gap-3 rounded-2xl border border-sidebar-border bg-card p-3">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary-soft text-primary font-semibold text-sm">
-            AS
-          </div>
-          <div className="min-w-0">
-            <div className="text-sm font-semibold truncate">Admin Sky</div>
-            <div className="text-xs text-muted-foreground truncate">admin@yoflix.com</div>
-          </div>
-        </div>
+      <div className="border-t border-[#ECEEF3] px-6 py-5 text-xs text-slate-500">
+        © {new Date().getFullYear()} Yoflix. All rights reserved.
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      <div className="hidden lg:flex lg:w-60 lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-30">
+        {content}
+      </div>
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-slate-950/45 backdrop-blur-sm lg:hidden"
+              onClick={onClose}
+              aria-label="Close navigation"
+            />
+            <motion.aside
+              initial={{ x: -240 }}
+              animate={{ x: 0 }}
+              exit={{ x: -240 }}
+              transition={{ type: "spring", stiffness: 280, damping: 30 }}
+              className="fixed inset-y-0 left-0 z-50 w-60 lg:hidden"
+            >
+              {content}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

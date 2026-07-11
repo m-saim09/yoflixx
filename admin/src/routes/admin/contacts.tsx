@@ -50,7 +50,7 @@ function ContactsPage() {
     queryFn: () => apiRequest<ContactsResponse>("/contacts"),
   });
 
-  const contacts = data?.data.contacts ?? [];
+  const contacts = useMemo(() => data?.data.contacts ?? [], [data?.data.contacts]);
 
   useEffect(() => {
     if (!selectedId && contacts.length) {
@@ -115,8 +115,11 @@ function ContactsPage() {
   const replied = contacts.filter((contact) => contact.status === "Replied").length;
 
   return (
-    <AdminShell title="Contacts" description="Inbox of all contact messages.">
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <AdminShell
+      title="Contacts"
+      description="A refined inbox for customer messages, replies, and follow-up actions."
+    >
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="Total Messages"
           value={String(contacts.length)}
@@ -128,10 +131,10 @@ function ContactsPage() {
         <StatCard label="Avg. Reply Time" value="Manual" icon={MessageCircle} accent="primary" />
       </div>
 
-      <Card className="mt-4 p-0 overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-[340px_1fr] min-h-[560px]">
-          <div className="border-r border-border">
-            <div className="p-4 border-b border-border">
+      <Card className="mt-4 overflow-hidden p-0">
+        <div className="grid min-h-[460px] grid-cols-1 md:grid-cols-[360px_1fr]">
+          <div className="border-b border-border/70 md:border-b-0 md:border-r">
+            <div className="border-b border-border/70 p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="text-sm font-semibold">Inbox</div>
@@ -147,10 +150,10 @@ function ContactsPage() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search by name, email or message"
-                className="mt-4 w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                className="mt-4 w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm outline-none transition focus:border-primary"
               />
             </div>
-            <div className="divide-y divide-border max-h-[520px] overflow-y-auto">
+            <div className="max-h-[420px] divide-y divide-border/70 overflow-y-auto">
               {isLoading && (
                 <div className="p-4 text-sm text-muted-foreground">Loading contacts...</div>
               )}
@@ -170,10 +173,10 @@ function ContactsPage() {
                     if (contact.status === "New")
                       updateContact.mutate({ id: contact._id, status: "Read" });
                   }}
-                  className={`w-full text-left p-4 transition-colors ${selected?._id === contact._id ? "bg-primary-soft" : "hover:bg-secondary/40"}`}
+                  className={`w-full text-left p-3 transition ${selected?._id === contact._id ? "bg-primary-soft" : "hover:bg-secondary/40"}`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-primary-soft text-primary text-xs font-semibold">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-primary-soft text-xs font-semibold text-primary">
                       {contact.name
                         .split(" ")
                         .map((part) => part[0])
@@ -183,8 +186,8 @@ function ContactsPage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="font-semibold text-sm truncate">{contact.name}</div>
-                        <span className="text-[10px] text-muted-foreground shrink-0">
+                        <div className="truncate text-sm font-semibold">{contact.name}</div>
+                        <span className="shrink-0 text-[10px] text-muted-foreground">
                           {new Date(contact.createdAt).toLocaleDateString()}
                         </span>
                       </div>
@@ -193,7 +196,7 @@ function ContactsPage() {
                         <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
                         <span>{contact.phone}</span>
                       </div>
-                      <div className="mt-3 text-xs text-muted-foreground line-clamp-2">
+                      <div className="mt-3 line-clamp-2 text-xs text-muted-foreground">
                         {contact.message}
                       </div>
                       <div className="mt-3">
@@ -209,7 +212,7 @@ function ContactsPage() {
           <div className="flex flex-col">
             {selected ? (
               <>
-                <div className="p-5 border-b border-border flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-3 border-b border-border/70 p-4">
                   <div>
                     <div className="font-semibold">{selected.name}</div>
                     <div className="text-xs text-muted-foreground">
@@ -227,15 +230,15 @@ function ContactsPage() {
                     </button>
                   </div>
                 </div>
-                <div className="flex-1 p-5 space-y-4 overflow-y-auto bg-background/60">
-                  <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-card border border-border p-4">
+                <div className="flex-1 space-y-4 overflow-y-auto bg-background/60 p-4">
+                  <div className="max-w-[85%] rounded-[22px] rounded-tl-sm border border-border/70 bg-card p-4 shadow-sm">
                     <p className="whitespace-pre-wrap text-sm">{selected.message}</p>
-                    <div className="text-[10px] text-muted-foreground mt-2">
+                    <div className="mt-2 text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
                       {new Date(selected.createdAt).toLocaleString()}
                     </div>
                   </div>
                 </div>
-                <div className="p-4 border-t border-border bg-card">
+                <div className="border-t border-border/70 bg-card p-3">
                   <div className="mb-3 flex flex-wrap gap-2">
                     {(["New", "Read", "Replied"] as const).map((nextStatus) => (
                       <button
@@ -252,13 +255,13 @@ function ContactsPage() {
                       value={reply}
                       onChange={(event) => setReply(event.target.value)}
                       placeholder="Write a reply..."
-                      className="w-full bg-transparent text-sm outline-none resize-none h-16"
+                      className="h-16 w-full resize-none bg-transparent text-sm outline-none"
                     />
-                    <div className="flex items-center justify-end mt-2">
+                    <div className="mt-2 flex items-center justify-end">
                       <button
                         onClick={sendReply}
                         disabled={!reply.trim()}
-                        className="flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-4 py-2 text-sm font-medium disabled:opacity-60"
+                        className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60"
                       >
                         <Send className="h-4 w-4" /> Send
                       </button>

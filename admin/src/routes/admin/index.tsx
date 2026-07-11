@@ -108,7 +108,7 @@ function DashboardPage() {
       : 0,
   };
 
-  const monthlyGrowth = (analytics?.monthlyInquiries || []).map((m: any) => ({
+  const monthlyGrowth = (analytics?.monthlyInquiries || []).map((m) => ({
     m: m.label || "",
     inquiries: m.leads ?? 0,
     leads: m.leads ?? 0,
@@ -116,13 +116,15 @@ function DashboardPage() {
 
   const colors = [`var(--chart-1)`, `var(--chart-2)`, `var(--chart-3)`, `var(--chart-4)`];
 
-  const leadStatus = Object.entries(analytics?.leadsByStatus || {}).map(
-    ([name, value], i) => ({ name, value, color: colors[i % colors.length] }) as any,
-  );
+  const leadStatus = Object.entries(analytics?.leadsByStatus || {}).map(([name, value], i) => ({
+    name,
+    value: Number(value),
+    color: colors[i % colors.length],
+  }));
 
-  const planDistribution = (analytics?.leadsByPlan || []).map((p: any, i: number) => ({
-    name: p._id,
-    value: p.count || 0,
+  const planDistribution = (analytics?.leadsByPlan || []).map((p, i) => ({
+    name: p._id ?? "Unknown",
+    value: p.count ?? 0,
     color: colors[i % colors.length],
   }));
 
@@ -154,8 +156,11 @@ function DashboardPage() {
     })) || [];
 
   return (
-    <AdminShell title="Dashboard" description="Welcome back, here's what's happening today.">
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <AdminShell
+      title="Dashboard"
+      description="Executive view of pipeline health, customer signals, and growth momentum."
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="Total Leads"
           value={kpis.totalLeads.toLocaleString()}
@@ -186,16 +191,16 @@ function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <Card className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[1.6fr_0.9fr]">
+        <Card className="overflow-hidden p-0">
+          <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
             <div>
-              <h3 className="font-display font-semibold">Monthly Inquiry Growth</h3>
-              <p className="text-xs text-muted-foreground">Last 8 months</p>
+              <h3 className="font-display text-lg font-semibold">Monthly Inquiry Growth</h3>
+              <p className="text-sm text-muted-foreground">Last 8 months of acquisition momentum</p>
             </div>
             <Badge tone="success">↑ 18.4%</Badge>
           </div>
-          <div className="h-72">
+          <div className="h-60 p-4">
             <ResponsiveContainer>
               <AreaChart data={monthlyGrowth}>
                 <defs>
@@ -238,16 +243,16 @@ function DashboardPage() {
         </Card>
 
         <Card>
-          <h3 className="font-display font-semibold">Lead Status</h3>
-          <p className="text-xs text-muted-foreground mb-2">Current pipeline</p>
-          <div className="h-56">
+          <h3 className="font-display text-lg font-semibold">Lead Status</h3>
+          <p className="mb-3 text-sm text-muted-foreground">Current pipeline distribution</p>
+          <div className="h-48">
             <ResponsiveContainer>
               <PieChart>
                 <Pie
                   data={leadStatus}
                   dataKey="value"
-                  innerRadius={50}
-                  outerRadius={80}
+                  innerRadius={48}
+                  outerRadius={78}
                   paddingAngle={2}
                 >
                   {leadStatus.map((e, i) => (
@@ -258,10 +263,10 @@ function DashboardPage() {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="grid grid-cols-2 gap-2 mt-2">
+          <div className="mt-2 grid grid-cols-2 gap-2">
             {leadStatus.map((s) => (
               <div key={s.name} className="flex items-center gap-2 text-xs">
-                <span className="h-2 w-2 rounded-full" style={{ background: s.color }} />
+                <span className="h-2.5 w-2.5 rounded-full" style={{ background: s.color }} />
                 <span className="text-muted-foreground">{s.name}</span>
                 <span className="ml-auto font-semibold">{s.value}</span>
               </div>
@@ -270,41 +275,41 @@ function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <Card className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-semibold">Recent Leads</h3>
-            <button className="text-xs font-medium text-primary hover:underline">View all</button>
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1.4fr_0.9fr]">
+        <Card className="overflow-hidden p-0">
+          <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
+            <h3 className="font-display text-lg font-semibold">Recent Leads</h3>
+            <button className="text-xs font-semibold text-primary hover:underline">View all</button>
           </div>
-          <div className="overflow-x-auto -mx-5">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-full text-sm">
               <thead>
-                <tr className="text-left text-xs text-muted-foreground border-b border-border">
-                  <th className="px-5 py-2.5 font-medium">Name</th>
-                  <th className="py-2.5 font-medium">Company</th>
-                  <th className="py-2.5 font-medium">Plan</th>
-                  <th className="py-2.5 font-medium">Status</th>
-                  <th className="py-2.5 font-medium px-5 text-right">Created</th>
+                <tr className="border-b border-border/70 bg-secondary/40 text-left text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                  <th className="px-5 py-2 font-medium">Name</th>
+                  <th className="py-2 font-medium">Company</th>
+                  <th className="py-2 font-medium">Plan</th>
+                  <th className="py-2 font-medium">Status</th>
+                  <th className="px-5 py-2 text-right font-medium">Created</th>
                 </tr>
               </thead>
               <tbody>
                 {leads.slice(0, 5).map((l) => (
                   <tr
                     key={l.id}
-                    className="border-b border-border/60 last:border-0 hover:bg-secondary/40"
+                    className="border-b border-border/60 last:border-0 transition hover:bg-secondary/40"
                   >
-                    <td className="px-5 py-3">
+                    <td className="px-5 py-2">
                       <div className="font-medium">{l.name}</div>
                       <div className="text-xs text-muted-foreground">{l.email}</div>
                     </td>
                     <td className="py-3">{l.company}</td>
-                    <td className="py-3">
+                    <td className="py-2">
                       <Badge tone="primary">{l.plan}</Badge>
                     </td>
-                    <td className="py-3">
+                    <td className="py-2">
                       <Badge tone={statusTone[l.status]}>{l.status}</Badge>
                     </td>
-                    <td className="py-3 px-5 text-right text-muted-foreground">{l.created}</td>
+                    <td className="px-5 py-2 text-right text-muted-foreground">{l.created}</td>
                   </tr>
                 ))}
               </tbody>
@@ -312,44 +317,47 @@ function DashboardPage() {
           </div>
         </Card>
 
-        <div className="space-y-4">
-          <Card>
-            <h3 className="font-display font-semibold mb-2">Plan Distribution</h3>
-            <div className="h-44">
-              <ResponsiveContainer>
-                <PieChart>
-                  <Pie data={planDistribution} dataKey="value" innerRadius={40} outerRadius={70}>
-                    {planDistribution.map((e, i) => (
-                      <Cell key={i} fill={e.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid var(--border)" }} />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="space-y-1 mt-2">
-              {planDistribution.map((p) => (
-                <div key={p.name} className="flex items-center gap-2 text-xs">
-                  <span className="h-2 w-2 rounded-full" style={{ background: p.color }} />
-                  <span className="text-muted-foreground">{p.name}</span>
-                  <span className="ml-auto font-semibold">{p.value}</span>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
+        <Card>
+          <h3 className="font-display text-lg font-semibold">Plan Distribution</h3>
+          <div className="mt-3 h-40">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie data={planDistribution} dataKey="value" innerRadius={42} outerRadius={72}>
+                  {planDistribution.map((e, i) => (
+                    <Cell key={i} fill={e.color} />
+                  ))}
+                </Pie>
+                <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid var(--border)" }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 space-y-1">
+            {planDistribution.map((p) => (
+              <div key={p.name} className="flex items-center gap-2 text-xs">
+                <span className="h-2.5 w-2.5 rounded-full" style={{ background: p.color }} />
+                <span className="text-muted-foreground">{p.name}</span>
+                <span className="ml-auto font-semibold">{p.value}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <Card className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-display font-semibold">Recent Contacts</h3>
-            <button className="text-xs font-medium text-primary hover:underline">Open inbox</button>
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1.25fr_0.85fr]">
+        <Card className="overflow-hidden p-0">
+          <div className="flex items-center justify-between border-b border-border/70 px-5 py-4">
+            <h3 className="font-display text-lg font-semibold">Recent Contacts</h3>
+            <button className="text-xs font-semibold text-primary hover:underline">
+              Open inbox
+            </button>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/70">
             {contacts.slice(0, 4).map((c) => (
-              <div key={c.id} className="py-3 flex items-start gap-3">
-                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary-soft text-primary text-xs font-semibold">
+              <div
+                key={c.id}
+                className="flex items-start gap-3 px-5 py-3 transition hover:bg-secondary/30"
+              >
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-primary-soft text-xs font-semibold text-primary">
                   {c.name
                     .split(" ")
                     .map((n) => n[0])
@@ -357,10 +365,10 @@ function DashboardPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <div className="font-medium text-sm truncate">{c.name}</div>
-                    <div className="text-xs text-muted-foreground shrink-0">{c.time}</div>
+                    <div className="truncate text-sm font-semibold">{c.name}</div>
+                    <div className="shrink-0 text-xs text-muted-foreground">{c.time}</div>
                   </div>
-                  <div className="text-xs text-muted-foreground truncate">
+                  <div className="mt-1 truncate text-xs text-muted-foreground">
                     {c.subject} — {c.preview}
                   </div>
                 </div>
@@ -377,8 +385,8 @@ function DashboardPage() {
         </Card>
 
         <Card>
-          <h3 className="font-display font-semibold mb-3">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-2">
+          <h3 className="font-display text-lg font-semibold">Quick Actions</h3>
+          <div className="mt-3 grid grid-cols-2 gap-3">
             {[
               { label: "Add Lead", icon: Plus },
               { label: "Create Plan", icon: Tag },
@@ -387,10 +395,10 @@ function DashboardPage() {
             ].map((a) => (
               <button
                 key={a.label}
-                className="group rounded-xl border border-border bg-card hover:bg-primary-soft hover:border-primary/30 p-3 text-left transition-colors"
+                className="group rounded-[12px] border border-border/70 bg-secondary/30 p-3 text-left transition hover:-translate-y-0.5 hover:border-primary/30 hover:bg-primary-soft"
               >
-                <a.icon className="h-4 w-4 text-primary mb-2" />
-                <div className="text-sm font-medium">{a.label}</div>
+                <a.icon className="mb-2 h-4 w-4 text-primary" />
+                <div className="text-sm font-semibold">{a.label}</div>
               </button>
             ))}
           </div>

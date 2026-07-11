@@ -37,12 +37,12 @@ import {
   Menu,
   X,
   ChevronDown,
+  ShoppingCart,
 } from "lucide-react";
-import heroBg from "@/assets/hero-bg.png";
-import sphereImg from "@/assets/sphere.png";
 import { apiRequest } from "@/lib/api";
 import { PricingCard } from "@/components/pricing-card";
 import useWebsiteSettings from "@/hooks/use-website-settings";
+import heroBg from "@/assets/hero-bg.png";
 import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
 
 type PricingPlanOption = {
@@ -59,6 +59,74 @@ type PricingPlanOption = {
   isFeatured?: boolean;
 };
 
+type Testimonial = {
+  text: string;
+  image: string;
+  name: string;
+  role: string;
+};
+
+const homeTestimonials: Testimonial[] = [
+  {
+    text: "This ERP revolutionized our operations, streamlining finance and inventory. The cloud-based platform keeps us productive, even remotely.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Briana Patton",
+    role: "Operations Manager",
+  },
+  {
+    text: "Implementing this ERP was smooth and quick. The customizable, user-friendly interface made team training effortless.",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Bilal Ahmed",
+    role: "IT Manager",
+  },
+  {
+    text: "The support team is exceptional, guiding us through setup and providing ongoing assistance, ensuring our satisfaction.",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Saman Malik",
+    role: "Customer Support Lead",
+  },
+  {
+    text: "This ERP's seamless integration enhanced our business operations and efficiency. Highly recommend for its intuitive interface.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Omar Raza",
+    role: "CEO",
+  },
+  {
+    text: "Its robust features and quick support have transformed our workflow, making us significantly more efficient.",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Zainab Hussain",
+    role: "Project Manager",
+  },
+  {
+    text: "The smooth implementation exceeded expectations. It streamlined processes, improving overall business performance.",
+    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Aliza Khan",
+    role: "Business Analyst",
+  },
+  {
+    text: "Our business functions improved with a user-friendly design and positive customer feedback.",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Farhan Siddiqui",
+    role: "Marketing Director",
+  },
+  {
+    text: "They delivered a solution that exceeded expectations, understanding our needs and enhancing our operations.",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Sana Sheikh",
+    role: "Sales Manager",
+  },
+  {
+    text: "Using this ERP, our online presence and conversions significantly improved, boosting business performance.",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Hassan Ali",
+    role: "E-commerce Manager",
+  },
+];
+
+const firstColumn = homeTestimonials.slice(0, 3);
+const secondColumn = homeTestimonials.slice(3, 6);
+const thirdColumn = homeTestimonials.slice(6, 9);
+
 type PageHeroProps = {
   eyebrow: string;
   title: React.ReactNode;
@@ -69,25 +137,7 @@ type PageHeroProps = {
 export function PageHero({ eyebrow, title, accent, sub }: PageHeroProps) {
   return (
     <section className="relative overflow-hidden px-6 pt-28 pb-16 sm:pt-36 sm:pb-24">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.18),transparent_52%)]" />
-
-      {/* decorative spheres for page heroes */}
-      <motion.img
-        src={sphereImg}
-        alt=""
-        aria-hidden
-        className="absolute -left-6 top-6 h-10 w-10 opacity-80"
-        animate={{ y: [0, 12, 0], rotate: [0, 25, 0] }}
-        transition={{ duration: 7, repeat: Infinity }}
-      />
-      <motion.img
-        src={sphereImg}
-        alt=""
-        aria-hidden
-        className="absolute right-6 bottom-8 h-8 w-8 opacity-70"
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 5, repeat: Infinity }}
-      />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(59,110,245,0.16),transparent_52%)]" />
 
       <div className="mx-auto max-w-6xl">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-primary shadow-soft backdrop-blur">
@@ -118,24 +168,17 @@ CSS-in-JS, consider adding these keyframes to your main stylesheet.
 /* ============ HERO ============ */
 export function Hero() {
   const { data: settings } = useWebsiteSettings();
-  const hero = settings?.heroSection ?? ({} as any);
-  const businessInfo = settings?.businessInfo ?? ({} as any);
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, -24]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
+  const hero = (settings?.heroSection ?? {}) as Record<string, any>;
 
-  const titleText = "Scale Your eBay Business with Expert Marketplace Support";
-  const highlightText = "Expert Marketplace Support";
-  const heroSupportLine =
-    hero.supportLine ||
-    "Also supporting Walmart and TikTok Shop operations.";
+  const titleText = hero.title || "Scale Your eBay Business with Expert Marketplace Support";
+  const highlightText = hero.highlightText || "eBay";
+  const heroSupportLine = hero.supportLine || "Trusted by leading marketplaces";
   const heroDescription =
-    hero.description ||
-    "YOFLIX helps businesses manage and grow eBay accounts with expert support.";
+    hero.description || "From store setup to scaling, Yoflix provides end-to-end eCommerce solutions to help you grow faster.";
+
   const titleSegments = (() => {
     const safeTitle = titleText || "";
-    const safeHighlight = highlightText?.trim() || "";
+    const safeHighlight = String(highlightText || "").trim();
 
     if (!safeHighlight) {
       return [{ text: safeTitle, highlight: false }];
@@ -165,86 +208,88 @@ export function Hero() {
 
     return segments;
   })();
-  const titleLength = (titleText || "").trim().length;
-  const titleClassName =
-    titleLength > 70
-      ? "text-3xl leading-[1.06] sm:text-4xl lg:text-5xl"
-      : titleLength > 45
-        ? "text-4xl leading-[1.05] sm:text-5xl lg:text-6xl"
-        : "text-5xl leading-[1.05] sm:text-6xl lg:text-7xl";
-  const heroBadge = hero.badge || "Trusted eBay Growth Partner";
-  const primaryButtonText = hero.primaryButtonText || "Book Consultation";
+
+  const heroBadge = hero.badge || "YOUR GROWTH PARTNER";
+  const primaryButtonText = hero.primaryButtonText || "Get Free Consultation";
   const primaryButtonLink = hero.primaryButtonLink || "/consultation";
-  const secondaryButtonText = hero.secondaryButtonText || "View eBay Plans";
-  const secondaryButtonLink = hero.secondaryButtonLink || "/pricing";
-  const chartHeights = [96, 136, 184, 238, 292, 340, 392];
-  const avatarSources = [
-    "https://i.pravatar.cc/80?img=12",
-    "https://i.pravatar.cc/80?img=32",
-    "https://i.pravatar.cc/80?img=47",
-    "https://i.pravatar.cc/80?img=68",
-    "https://i.pravatar.cc/80?img=5",
+  const secondaryButtonText = hero.secondaryButtonText || "Explore Services";
+  const secondaryButtonLink = hero.secondaryButtonLink || "/services";
+
+  const featureCards = [
+    "Expert Support",
+    "Proven Strategies",
+    "End-to-End Solution",
+    "Grow Faster",
   ];
 
   return (
-    <section
-      ref={ref}
-      id="home"
-      className="relative isolate overflow-hidden px-6 py-20 sm:px-8 sm:py-24 lg:px-8 lg:py-28"
-      style={{
-        backgroundImage: `url(${heroBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.78),transparent_36%),radial-gradient(circle_at_83%_16%,rgba(14,165,233,0.16),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(248,250,252,0.9))]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-80 [background-image:radial-gradient(rgba(15,23,42,0.07)_1px,transparent_1px)] [background-size:20px_20px]" />
-      <div className="pointer-events-none absolute left-[-8%] top-[-10%] -z-10 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-[-16%] right-[-10%] -z-10 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl" />
+    <section id="home" className="relative overflow-hidden bg-slate-50">
+      <div
+        className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      />
 
-      <div className="mx-auto max-w-4xl">
-        <motion.div
-          className="max-w-2xl mx-auto text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <h1 className={`font-semibold tracking-tight text-slate-900 ${titleClassName}`}>
+      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10 lg:py-20">
+        <div className="max-w-3xl">
+          <span className="inline-flex rounded-full border border-[#DBEAFE] bg-[#EFF6FF] px-5 py-2 text-sm font-semibold text-[#2563EB] shadow-[0_10px_24px_rgba(37,99,235,0.08)]">
+            {heroBadge}
+          </span>
+
+          <h1 className="mt-8 text-4xl font-bold leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
             {titleSegments.map((segment, idx) =>
               segment.highlight ? (
-                <span key={idx} className="text-blue-900 font-bold">
+                <span key={idx} className="text-[#2563EB]">
                   {segment.text}
                 </span>
               ) : (
                 <span key={idx}>{segment.text}</span>
-              )
+              ),
             )}
           </h1>
 
-          <p className="mt-4 mx-auto max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
+          <p className="mt-8 text-lg leading-9 text-gray-600 sm:text-xl">
             {heroDescription}
           </p>
 
-          <p className="mt-2 text-sm font-medium uppercase tracking-[0.28em] text-slate-500">
-            {heroSupportLine}
-          </p>
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Link
               to={primaryButtonLink}
-              className="group inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3 text-sm font-medium text-white shadow-soft transition-all hover:scale-105"
+              className="inline-flex items-center justify-center gap-3 rounded-xl bg-[linear-gradient(135deg,#3B6EF5_0%,#2563EB_100%)] px-8 py-4 text-base font-semibold text-white shadow-[0_16px_36px_rgba(37,99,235,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(37,99,235,0.22)]"
             >
               {primaryButtonText}
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight size={18} />
             </Link>
             <Link
               to={secondaryButtonLink}
-              className="inline-flex items-center gap-2 rounded-full border-2 border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-900 transition-all hover:bg-slate-50"
+              className="inline-flex items-center justify-center rounded-xl border border-[#DBEAFE] bg-white/90 px-8 py-4 text-base font-semibold text-[#1E3A8A] transition hover:border-[#93C5FD] hover:bg-[#EFF6FF]"
             >
               {secondaryButtonText}
             </Link>
           </div>
-        </motion.div>
+
+          <div className="mt-16">
+            <p className="mb-6 text-sm font-medium uppercase tracking-[0.2em] text-gray-500">
+              {heroSupportLine}
+            </p>
+            <div className="flex flex-wrap gap-6 text-2xl font-bold text-slate-700 sm:gap-10 sm:text-3xl">
+              <span className="text-red-500">eBay</span>
+              <span className="text-blue-500">Walmart</span>
+              <span>TikTok Shop</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto mt-20 grid max-w-7xl gap-8 rounded-[28px] border border-[#E2E8F0] bg-white/90 p-10 shadow-[0_24px_80px_rgba(15,23,42,0.06)] md:grid-cols-4">
+          {featureCards.map((item) => (
+            <div key={item}>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EFF6FF]">
+                <ShoppingCart className="text-[#2563EB]" />
+              </div>
+              <h3 className="mt-4 font-bold text-slate-950">{item}</h3>
+              <p className="mt-2 text-gray-500">Lorem ipsum dolor sit amet.</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -271,40 +316,45 @@ export function Navbar() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="fixed top-0 left-0 right-0 z-50 px-4 pt-4"
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full bg-transparent px-5 py-3 sm:px-7">
-          <Link to="/" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-xl gradient-primary text-white shadow-glow">
-            <Sparkles className="h-5 w-5" />
-          </span>
-          <span className="text-xl font-semibold tracking-tight">{siteName}</span>
+      <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-[#E2E8F0] bg-white/90 px-5 py-3 shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur sm:px-7">
+        <Link to="/" className="flex items-center gap-2">
+          <motion.span
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="text-xl font-black tracking-[0.12em] text-slate-950 sm:text-[1.45rem]"
+          >
+            <span className="text-[#2563EB]">Yo</span>
+            <span className="text-slate-700">{siteName.replace(/^Yo/i, "") || "flix"}</span>
+          </motion.span>
         </Link>
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden flex-1 items-center justify-center gap-1 lg:flex">
           {NAV.map((n) => (
-            <li key={n.label}>
+            <motion.li key={n.label} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.97 }}>
               <Link
                 to={n.to}
-                className="rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/60 hover:text-foreground"
+                className="rounded-full px-3 py-2 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-[#EFF6FF] hover:text-[#2563EB]"
                 activeProps={{
                   className:
-                    "rounded-full px-3 py-2 text-sm text-foreground bg-white/60 font-medium",
+                    "rounded-full bg-[linear-gradient(135deg,#3B6EF5_0%,#2563EB_100%)] px-3 py-2 text-sm font-semibold text-white shadow-sm",
                 }}
                 activeOptions={{ exact: true }}
               >
                 {n.label}
               </Link>
-            </li>
+            </motion.li>
           ))}
         </ul>
         <div className="flex items-center gap-2">
           <Link
             to="/consultation"
-            className="hidden rounded-full gradient-primary px-5 py-2.5 text-sm font-medium text-white shadow-soft transition-transform hover:scale-[1.03] sm:inline-block"
+            className="hidden rounded-full bg-[linear-gradient(135deg,#3B6EF5_0%,#2563EB_100%)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(37,99,235,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(37,99,235,0.3)] sm:inline-block"
           >
             Get Free Consultation
           </Link>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="grid h-10 w-10 place-items-center rounded-full bg-white/70 lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-full border border-[#E2E8F0] bg-white text-[#2563EB] shadow-sm lg:hidden"
             aria-label="Toggle menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -315,24 +365,24 @@ export function Navbar() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mx-auto mt-2 max-w-7xl rounded-3xl bg-white/80 p-4 shadow-lg backdrop-blur-sm lg:hidden"
+          className="mx-auto mt-2 max-w-7xl rounded-3xl border border-[#E2E8F0] bg-white p-4 shadow-[0_20px_60px_-24px_rgba(37,99,235,0.16)] lg:hidden"
         >
           <ul className="flex flex-col gap-1">
             {NAV.map((n) => (
-              <li key={n.label}>
+              <motion.li key={n.label} whileHover={{ x: 4, scale: 1.01 }} whileTap={{ scale: 0.98 }}>
                 <Link
                   onClick={() => setOpen(false)}
                   to={n.to}
-                  className="block rounded-xl px-4 py-3 text-sm hover:bg-white/60"
+                  className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-[#EFF6FF] hover:text-[#2563EB]"
                 >
                   {n.label}
                 </Link>
-              </li>
+              </motion.li>
             ))}
             <Link
               to="/consultation"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center rounded-full gradient-primary px-5 py-3 text-center text-sm font-medium text-white"
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#3B6EF5_0%,#2563EB_100%)] px-5 py-3 text-center text-sm font-semibold text-white shadow-sm"
             >
               Get Free Consultation
             </Link>
@@ -797,7 +847,7 @@ export function Services() {
 
   return (
     <section id="services" className="relative bg-white py-24 sm:py-32">
-      <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.12),transparent_45%),radial-gradient(circle_at_10%_20%,rgba(15,23,42,0.08),transparent_20%)]" />
+      <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(59,110,245,0.14),transparent_45%),radial-gradient(circle_at_10%_20%,rgba(17,24,39,0.06),transparent_20%)]" />
       <div className="mx-auto max-w-7xl px-6 relative">
         <SectionTitle
           eyebrow="OUR SERVICES"
@@ -831,7 +881,7 @@ export function Services() {
                   x: isActive ? motionState.x : 0,
                   y: isActive ? motionState.y : 0,
                 }}
-                className={`group relative overflow-hidden rounded-[20px] border border-slate-200 bg-white p-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] transition duration-300 ease-out will-change-transform ${isActive ? "border-blue-600/30 shadow-[0_28px_90px_rgba(37,99,235,0.17)]" : "hover:border-slate-300"}`}
+                className={`group relative overflow-hidden rounded-[20px] border border-[#E5E7EB] bg-white p-7 shadow-[0_16px_40px_rgba(17,24,39,0.05)] transition duration-300 ease-out will-change-transform ${isActive ? "border-[#3B6EF5]/40 shadow-[0_24px_70px_rgba(59,110,245,0.14)]" : "hover:border-[#3B6EF5]/30 hover:shadow-[0_24px_60px_rgba(17,24,39,0.08)]"}`}
               >
                 <div className="pointer-events-none absolute inset-x-5 top-5 h-32 rounded-[20px] bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.14),transparent_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
                 <motion.div
@@ -847,23 +897,23 @@ export function Services() {
                 </span>
 
                 <div className="relative z-10 flex items-center justify-start gap-4">
-                  <div className="grid h-14 w-14 place-items-center rounded-3xl border border-slate-200 bg-slate-50 text-slate-950 shadow-sm">
+                  <div className="grid h-14 w-14 place-items-center rounded-3xl border border-[#E5E7EB] bg-[#EAF2FF] text-[#3B6EF5] shadow-sm">
                     <s.icon className="h-6 w-6" />
                   </div>
                 </div>
 
-                <h3 className="relative z-10 mt-6 text-2xl font-semibold tracking-tight text-slate-950">
+                <h3 className="relative z-10 mt-6 text-2xl font-semibold tracking-tight text-[#111827]">
                   {s.title}
                 </h3>
                 {s.desc ? (
-                  <p className="relative z-10 mt-3 text-sm leading-6 text-slate-600 opacity-0 max-h-0 overflow-hidden transition-all duration-200 group-hover:opacity-100 group-hover:max-h-40">
+                  <p className="relative z-10 mt-3 text-sm leading-6 text-[#6B7280] opacity-0 max-h-0 overflow-hidden transition-all duration-200 group-hover:opacity-100 group-hover:max-h-40">
                     {s.desc}
                   </p>
                 ) : null}
 
-                <div className="relative z-10 mt-6 flex items-center gap-3 text-sm font-semibold text-blue-600">
+                <div className="relative z-10 mt-6 flex items-center gap-3 text-sm font-semibold text-[#3B6EF5]">
                   <span>Learn More</span>
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-blue-600 shadow-[0_12px_30px_rgba(37,99,235,0.08)] transition duration-200 ease-out group-hover:bg-blue-50">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#EAF2FF] text-[#3B6EF5] shadow-[0_12px_30px_rgba(59,110,245,0.08)] transition duration-200 ease-out group-hover:bg-[#DCEBFF]">
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </div>
@@ -875,7 +925,7 @@ export function Services() {
         <div className="mt-10 flex justify-center">
           <Link
             to="/services"
-            className="group inline-flex items-center justify-center rounded-full bg-[#4c83fd] px-7 py-3 text-sm font-semibold text-white shadow-lg transition duration-200 hover:bg-[#3b6ee5] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+            className="group inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#4A7BFF_0%,#2F5FE0_100%)] px-7 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(59,110,245,0.2)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(59,110,245,0.24)] active:translate-y-0"
           >
             <span>View All Services</span>
             <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -932,7 +982,6 @@ export function ServicesDecisionCTA() {
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </motion.div>
-
               <motion.a
                 href={whatsappLink}
                 target="_blank"
@@ -1434,67 +1483,111 @@ const CLIENT_TESTIMONIALS = [
   },
 ];
 
-export function TestimonialsSection() {
+type TestimonialCardProps = {
+  quote: string;
+  authorName: string;
+  authorTitle: string;
+  avatarUrl: string;
+};
+
+const TestimonialCard = ({ quote, authorName, authorTitle, avatarUrl }: TestimonialCardProps) => (
+  <motion.article
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.2 }}
+    transition={{ duration: 0.55, ease: "easeOut" }}
+    whileHover={{ y: -6, scale: 1.01 }}
+    className="group relative flex h-full min-h-[280px] w-[320px] shrink-0 flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white/90 p-7 shadow-[0_24px_80px_-36px_rgba(15,23,42,0.18)] backdrop-blur transition-all duration-300 hover:border-sky-200 hover:shadow-[0_32px_90px_-34px_rgba(37,99,235,0.22)]"
+  >
+    <div className="absolute inset-0 rounded-[28px] bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.12),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+    <div className="relative z-10 flex h-full flex-col">
+      <div className="flex items-center justify-between gap-3">
+        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-sky-50 text-sky-600">
+          <Quote className="h-4 w-4" />
+        </div>
+        <span className="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          Verified
+        </span>
+      </div>
+
+      <p className="mt-6 flex-1 text-sm leading-7 text-slate-600">“{quote}”</p>
+
+      <div className="mt-7 flex items-center gap-3">
+        <img src={avatarUrl} alt={authorName} className="h-12 w-12 rounded-full object-cover ring-2 ring-sky-100" />
+        <div>
+          <h4 className="text-sm font-semibold text-slate-950">{authorName}</h4>
+          <p className="text-sm text-slate-500">{authorTitle}</p>
+        </div>
+      </div>
+    </div>
+  </motion.article>
+);
+
+type HorizontalScrollerProps = {
+  children: React.ReactNode;
+  speed?: string;
+  direction?: "left" | "right";
+};
+
+const HorizontalScroller = ({ children, speed = "32s", direction = "left" }: HorizontalScrollerProps) => {
+  const animationClass = direction === "right" ? "marquee-right" : "marquee-left";
+
   return (
-    <section className="bg-slate-50 py-16 sm:py-24">
+    <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white/70 px-4 py-4 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.16)] backdrop-blur">
+      <div className={`marquee ${animationClass}`} style={{ animationDuration: speed }}>
+        <div className="flex items-stretch gap-6 pr-6">{children}</div>
+        <div className="flex items-stretch gap-6 pr-6" aria-hidden="true">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export function TestimonialsSection() {
+  const testimonialRows = [
+    {
+      id: "top-row",
+      speed: "34s",
+      direction: "left" as const,
+      testimonials: CLIENT_TESTIMONIALS.slice(0, 3),
+    },
+    {
+      id: "bottom-row",
+      speed: "36s",
+      direction: "right" as const,
+      testimonials: CLIENT_TESTIMONIALS.slice(3),
+    },
+  ];
+
+  return (
+    <section className="relative overflow-hidden bg-slate-50 py-20 sm:py-24">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.12),transparent_32%)]" />
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-600 shadow-sm">
-            TESTIMONIALS
-          </span>
-          <h2 className="mt-6 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-            What our clients say
-          </h2>
-          <p className="mt-4 text-base leading-7 text-slate-600">
-            Real reviews from Amazon sellers we've helped recover, protect and scale.
-          </p>
-        </div>
+        <SectionTitle
+          eyebrow="Testimonials"
+          title={
+            <>
+              Seller stories, <span className="font-display italic gradient-text">backed by results</span>
+            </>
+          }
+          sub="Real feedback from marketplace sellers who trusted Yoflix to sharpen their operations and scale with confidence."
+        />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {CLIENT_TESTIMONIALS.map((testimonial, index) => (
-            <motion.article
-              key={testimonial.name}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: index * 0.08 }}
-              whileHover={{ y: -4 }}
-              className="group rounded-[32px] border border-slate-200 bg-white p-8 shadow-[0_20px_60px_-24px_rgba(15,23,42,0.18)] transition hover:-translate-y-1 hover:shadow-[0_28px_80px_-28px_rgba(15,23,42,0.2)]"
-            >
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <img src={testimonial.img} alt={testimonial.name} className="h-14 w-14 rounded-full object-cover" />
-                  <div>
-                    <div className="text-sm font-semibold text-slate-950">{testimonial.name}</div>
-                    <div className="text-xs uppercase tracking-[0.22em] text-slate-500">
-                      {testimonial.role}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-amber-400">
-                  {Array.from({ length: 5 }).map((_, starIndex) => (
-                    <Star key={starIndex} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-              </div>
-              <p className="mt-6 text-sm leading-7 text-slate-700">"{testimonial.text}"</p>
-              <div className="mt-6 text-xs uppercase tracking-[0.24em] text-slate-500">
-                {testimonial.company}
-              </div>
-            </motion.article>
+        <div className="mt-14 space-y-6">
+          {testimonialRows.map((row) => (
+            <HorizontalScroller key={row.id} speed={row.speed} direction={row.direction}>
+              {row.testimonials.map((testimonial) => (
+                <TestimonialCard
+                  key={testimonial.name}
+                  quote={testimonial.text}
+                  authorName={testimonial.name}
+                  authorTitle={`${testimonial.role} · ${testimonial.company}`}
+                  avatarUrl={testimonial.img}
+                />
+              ))}
+            </HorizontalScroller>
           ))}
-        </div>
-
-        <div className="mt-12 flex flex-wrap justify-center gap-3">
-          <a href="#" className="inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
-            Fiverr Profile →
-          </a>
-          <a href="#" className="inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 ring-1 ring-slate-200 transition hover:bg-slate-100">
-            Upwork Profile →
-          </a>
-          <a href="#" className="inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 ring-1 ring-slate-200 transition hover:bg-slate-100">
-            All testimonials →
-          </a>
         </div>
       </div>
     </section>
@@ -1567,6 +1660,116 @@ const ReviewMarqueeCard = ({
   </figure>
 );
 
+const TestimonialsColumn = (props: {
+  className?: string;
+  testimonials: Testimonial[];
+  duration?: number;
+}) => {
+  const items = [...props.testimonials, ...props.testimonials];
+
+  return (
+    <div className={props.className}>
+      <motion.div
+        animate={{
+          translateX: "-50%",
+        }}
+        transition={{
+          duration: props.duration || 12,
+          repeat: Infinity,
+          ease: "linear",
+          repeatType: "loop",
+        }}
+        className="flex gap-6 pb-6"
+      >
+        {items.map(({ text, image, name, role }, i) => (
+          <motion.div
+            key={`${name}-${i}`}
+            aria-hidden={i >= props.testimonials.length ? "true" : "false"}
+            tabIndex={i >= props.testimonials.length ? -1 : 0}
+            whileHover={{
+              scale: 1.03,
+              y: -4,
+              boxShadow:
+                "0 25px 50px -12px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+              transition: { type: "spring", stiffness: 400, damping: 17 },
+            }}
+            whileFocus={{
+              scale: 1.03,
+              y: -4,
+              boxShadow:
+                "0 25px 50px -12px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+              transition: { type: "spring", stiffness: 400, damping: 17 },
+            }}
+            className="p-10 rounded-3xl border border-neutral-200 dark:border-neutral-800 shadow-lg shadow-black/5 min-w-[18rem] w-full bg-white dark:bg-neutral-900 transition-all duration-300 cursor-default select-none group focus:outline-none focus:ring-2 focus:ring-primary/30"
+          >
+            <blockquote className="m-0 p-0">
+              <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal m-0 transition-colors duration-300">
+                {text}
+              </p>
+              <footer className="flex items-center gap-3 mt-6">
+                <img
+                  width={40}
+                  height={40}
+                  src={image}
+                  alt={`Avatar of ${name}`}
+                  className="h-10 w-10 rounded-full object-cover ring-2 ring-neutral-100 dark:ring-neutral-800 group-hover:ring-primary/30 transition-all duration-300 ease-in-out"
+                />
+                <div className="flex flex-col">
+                  <cite className="font-semibold not-italic tracking-tight leading-5 text-neutral-900 dark:text-white transition-colors duration-300">
+                    {name}
+                  </cite>
+                  <span className="text-sm leading-5 tracking-tight text-neutral-500 dark:text-neutral-500 mt-0.5 transition-colors duration-300">
+                    {role}
+                  </span>
+                </div>
+              </footer>
+            </blockquote>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+export function HomepageTestimonialsSection() {
+  return (
+    <section aria-labelledby="home-testimonials-heading" className="bg-transparent py-24 relative overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 50, rotate: -2 }}
+        whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], opacity: { duration: 0.8 } }}
+        className="container px-4 z-10 mx-auto"
+      >
+        <div className="flex flex-col items-center justify-center max-w-[540px] mx-auto mb-16">
+          <div className="flex justify-center">
+            <div className="border border-neutral-300 dark:border-neutral-700 py-1 px-4 rounded-full text-xs font-semibold tracking-wide uppercase text-neutral-600 dark:text-neutral-400 bg-neutral-100/50 dark:bg-neutral-800/50 transition-colors">
+              Testimonials
+            </div>
+          </div>
+
+          <h2 id="home-testimonials-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mt-6 text-center text-neutral-900 dark:text-white transition-colors">
+            What our users say
+          </h2>
+          <p className="text-center mt-5 text-neutral-500 dark:text-neutral-400 text-lg leading-relaxed max-w-sm transition-colors">
+            Discover how thousands of teams streamline their operations with our platform.
+          </p>
+        </div>
+
+        <div
+          className="mt-10 space-y-6 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] overflow-hidden"
+          role="region"
+          aria-label="Scrolling Testimonials"
+        >
+          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          <TestimonialsColumn testimonials={secondColumn} duration={19} />
+          <TestimonialsColumn testimonials={thirdColumn} duration={17} />
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
 export function TestimonialsMarquee() {
   const firstDuplicates = [...firstRow, ...firstRow];
   const secondDuplicates = [...secondRow, ...secondRow];
@@ -1576,7 +1779,7 @@ export function TestimonialsMarquee() {
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(15,23,42,0.08),transparent_35%)]" />
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-700">
+          <span className="inline-flex rounded-full bg-[#EFF6FF] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#2563EB]">
             Testimonials
           </span>
           <h2 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
@@ -1642,8 +1845,8 @@ export function HowItWorks() {
                 transition={{ duration: 0.45, delay: i * 0.06 }}
                 className="relative text-center"
               >
-                <div className="mx-auto h-20 w-20 rounded-full bg-white flex items-center justify-center font-display italic text-xl shadow-[0_28px_60px_rgba(109,93,252,0.08)] ring-1 ring-white/50">
-                  <span className="text-2xl text-[#6d5dfc]">{s.n}</span>
+                <div className="mx-auto h-20 w-20 rounded-full bg-white flex items-center justify-center font-display italic text-xl shadow-[0_28px_60px_rgba(37,99,235,0.08)] ring-1 ring-[#DBEAFE]">
+                  <span className="text-2xl text-[#2563EB]">{s.n}</span>
                 </div>
                 <h3 className="mt-6 text-center text-lg font-semibold text-[#042c54]">{s.t}</h3>
                 <p className="mt-2 text-center text-sm text-slate-600 max-w-xs mx-auto">{s.d}</p>
@@ -1799,18 +2002,17 @@ export function Pricing() {
   const PLANS = pricingPlans;
 
   return (
-    <section id="pricing" className="relative overflow-hidden py-24 sm:py-32">
-      {/* lavender mesh background */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(at_15%_20%,rgba(167,139,250,0.25),transparent_50%),radial-gradient(at_85%_80%,rgba(192,132,252,0.22),transparent_50%)]" />
+    <section id="pricing" className="relative overflow-hidden bg-[#F8FAFC] py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(at_15%_20%,rgba(59,110,245,0.12),transparent_50%),radial-gradient(at_85%_80%,rgba(59,110,245,0.08),transparent_50%)]" />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute left-[10%] top-20 -z-10 h-72 w-72 rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.35),transparent)] blur-3xl"
+        className="pointer-events-none absolute left-[10%] top-20 -z-10 h-72 w-72 rounded-full bg-[radial-gradient(closest-side,rgba(59,110,245,0.2),transparent)] blur-3xl"
         animate={{ y: [0, 30, 0] }}
         transition={{ duration: 9, repeat: Infinity }}
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute right-[8%] bottom-10 -z-10 h-80 w-80 rounded-full bg-[radial-gradient(closest-side,rgba(109,93,252,0.3),transparent)] blur-3xl"
+        className="pointer-events-none absolute right-[8%] bottom-10 -z-10 h-80 w-80 rounded-full bg-[radial-gradient(closest-side,rgba(59,110,245,0.16),transparent)] blur-3xl"
         animate={{ y: [0, -25, 0] }}
         transition={{ duration: 11, repeat: Infinity }}
       />
@@ -1828,7 +2030,7 @@ export function Pricing() {
               return (
                 <div
                   key={i}
-                  className="h-[480px] rounded-[28px] bg-white/80 p-8 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.16)]"
+                  className="h-[480px] rounded-[28px] border border-[#E5E7EB] bg-white p-8 shadow-[0_16px_40px_rgba(17,24,39,0.05)]"
                 />
               );
             }
@@ -1853,7 +2055,7 @@ export function Pricing() {
                   <>
                     <motion.div
                       aria-hidden
-                      className="absolute -inset-px rounded-[32px] bg-[linear-gradient(135deg,#6D5DFC,#C084FC,#8B5CF6)] opacity-90"
+                      className="absolute -inset-px rounded-[32px] bg-[linear-gradient(135deg,#4A7BFF_0%,#2F5FE0_100%)] opacity-90"
                       animate={{ opacity: [0.7, 1, 0.7] }}
                       transition={{ duration: 3, repeat: Infinity }}
                     />
@@ -1864,8 +2066,8 @@ export function Pricing() {
                 <div
                   className={`relative flex h-full flex-col rounded-[28px] p-8 transition-shadow sm:p-10 ${
                     popular
-                      ? "bg-white/95 backdrop-blur-xl shadow-[0_30px_80px_-20px_rgba(109,93,252,0.45)]"
-                      : "glass-strong hover:shadow-[0_20px_50px_-20px_rgba(109,93,252,0.3)]"
+                      ? "bg-white shadow-[0_24px_70px_rgba(59,110,245,0.16)]"
+                      : "border border-[#E5E7EB] bg-white shadow-[0_16px_40px_rgba(17,24,39,0.05)] transition-all duration-300 hover:shadow-[0_24px_60px_rgba(17,24,39,0.08)]"
                   }`}
                 >
                   {popular && (
@@ -1873,7 +2075,7 @@ export function Pricing() {
                       initial={{ y: -8, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.3, duration: 0.5 }}
-                      className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,#6D5DFC,#C084FC)] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-white shadow-[0_8px_24px_rgba(109,93,252,0.45)]"
+                      className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,#4A7BFF_0%,#2F5FE0_100%)] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-white shadow-[0_8px_24px_rgba(59,110,245,0.24)]"
                     >
                       ★ Most Popular
                     </motion.span>
@@ -1915,8 +2117,8 @@ export function Pricing() {
                       to="/contact"
                       className={`group/btn relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 ${
                         popular
-                          ? "gradient-primary text-white shadow-[0_12px_30px_-8px_rgba(109,93,252,0.6)] hover:shadow-[0_18px_40px_-8px_rgba(109,93,252,0.7)]"
-                          : "border border-primary/30 bg-white/60 text-primary hover:bg-white hover:shadow-[0_12px_30px_-12px_rgba(109,93,252,0.4)]"
+                          ? "bg-[linear-gradient(135deg,#4A7BFF_0%,#2F5FE0_100%)] text-white shadow-[0_12px_30px_-8px_rgba(59,110,245,0.24)] hover:shadow-[0_18px_40px_-8px_rgba(59,110,245,0.28)]"
+                          : "border border-[#E5E7EB] bg-white text-[#3B6EF5] hover:border-[#3B6EF5]/30 hover:bg-[#EAF2FF] hover:shadow-[0_12px_30px_-12px_rgba(59,110,245,0.16)]"
                       }`}
                     >
                       <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full" />

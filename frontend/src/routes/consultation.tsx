@@ -115,8 +115,8 @@ function ConsultationPage() {
   };
 
   return (
-    <main className="relative overflow-hidden bg-white text-slate-900">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(30,58,138,0.08),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.06),transparent_35%)]" />
+    <main className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] text-slate-900">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,110,245,0.09),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(59,110,245,0.06),transparent_35%)]" />
       <Navbar />
 
       {/* Header Section */}
@@ -127,7 +127,7 @@ function ConsultationPage() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-3xl text-center"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-4 py-2 text-sm font-semibold text-blue-700 mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-accent/80 px-4 py-2 text-sm font-semibold text-primary mb-6">
             <Sparkles className="h-4 w-4" />
             Free Consultation
           </div>
@@ -160,10 +160,10 @@ function ConsultationPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.15 + idx * 0.05 }}
-                    className="rounded-2xl border border-slate-200 bg-white/60 backdrop-blur-sm p-5 hover:border-blue-300 hover:shadow-lg transition-all duration-300"
+                    className="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur-sm p-5 hover:border-primary/25 hover:shadow-[0_18px_40px_-24px_rgba(59,110,245,0.3)] transition-all duration-300"
                   >
-                    <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 mb-3">
-                      <Icon className="h-5 w-5 text-blue-600" />
+                    <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-accent to-slate-100 mb-3">
+                      <Icon className="h-5 w-5 text-primary" />
                     </div>
                     <h3 className="font-semibold text-slate-900 mb-1 text-sm">{benefit.title}</h3>
                     <p className="text-xs text-slate-600">{benefit.desc}</p>

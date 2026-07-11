@@ -53,11 +53,11 @@ export function PricingCard({
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
-        className="relative overflow-hidden rounded-[30px] border border-slate-200 bg-white/95 shadow-[0_24px_80px_-28px_rgba(15,23,42,0.2)] backdrop-blur"
+        className="relative overflow-hidden rounded-[30px] border border-slate-200/80 bg-white/95 shadow-[0_24px_80px_-28px_rgba(59,110,245,0.18)] backdrop-blur"
       >
         {isHighlighted ? (
           <>
-            <div className="absolute inset-0 rounded-[30px] bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_55%,#3b82f6_100%)] opacity-95" />
+            <div className="absolute inset-0 rounded-[30px] bg-[linear-gradient(135deg,#3b6ef5_0%,#2f5fe0_55%,#4f79f6_100%)] opacity-95" />
             <div className="absolute inset-x-4 inset-y-4 rounded-[24px] border border-white/20" />
           </>
         ) : null}

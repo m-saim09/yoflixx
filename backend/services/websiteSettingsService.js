@@ -1,10 +1,17 @@
 const WebsiteSettings = require("../models/WebsiteSettings");
 const { defaultWebsiteSettings } = require("../utils/defaultWebsiteSettings");
+const { getDatabaseStatus } = require("../config/db");
 
-const isDevOverrideEnabled = () => {
-  const isProduction = (process.env.NODE_ENV || "development").toLowerCase() === "production";
-  return !isProduction && String(process.env.DEV_OVERRIDE || "").toLowerCase() === "true";
-};
+const isProduction = () => (process.env.NODE_ENV || "development").toLowerCase() === "production";
+const isDevOverrideEnabled = () => !isProduction() && String(process.env.DEV_OVERRIDE || "").toLowerCase() === "true";
+const shouldUseDevFallback = () => !isProduction() && (isDevOverrideEnabled() || getDatabaseStatus() !== "connected");
+
+const createDevFallbackSettings = () => ({
+  ...defaultWebsiteSettings,
+  _id: "dev-settings",
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+});
 
 const ensureWebsiteSettings = async () => {
   try {
@@ -16,13 +23,8 @@ const ensureWebsiteSettings = async () => {
 
     return settings;
   } catch (error) {
-    if (isDevOverrideEnabled()) {
-      return {
-        ...defaultWebsiteSettings,
-        _id: "dev-settings",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+    if (shouldUseDevFallback()) {
+      return createDevFallbackSettings();
     }
 
     throw error;

@@ -186,25 +186,24 @@ function SettingsPage() {
   }
 
   return (
-    <AdminShell title="Website Settings" description="Manage all public-facing website content.">
-      <div className="flex flex-wrap gap-1.5 rounded-2xl bg-card border border-border p-1.5">
+    <AdminShell
+      title="Website Settings"
+      description="Manage all public-facing website content with a calmer, more structured workflow."
+    >
+      <div className="flex flex-wrap gap-1.5 rounded-[22px] border border-border/70 bg-card p-1.5 shadow-sm">
         {tabs.map((item) => (
           <button
             key={item}
             onClick={() => setTab(item)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-              tab === item
-                ? "bg-primary text-primary-foreground shadow-[0_6px_18px_-8px_rgba(109,93,252,0.5)]"
-                : "text-muted-foreground hover:bg-secondary"
-            }`}
+            className={`rounded-2xl px-4 py-2 text-sm font-medium transition ${tab === item ? "bg-primary text-primary-foreground shadow-[0_6px_18px_-8px_rgba(109,93,252,0.5)]" : "text-muted-foreground hover:bg-secondary"}`}
           >
             {item}
           </button>
         ))}
       </div>
 
-      <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 space-y-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[1.4fr_0.7fr]">
+        <div className="space-y-4">
           {tab === "Business Info" && (
             <Card>
               <h3 className="font-display font-semibold mb-4">Business Information</h3>
@@ -392,20 +391,20 @@ function SettingsPage() {
 
         <div className="space-y-4">
           <Card>
-            <h3 className="font-display font-semibold mb-2">Save</h3>
-            <p className="text-xs text-muted-foreground mb-3">
-              Apply changes to MongoDB-backed website settings.
+            <h3 className="mb-2 font-display text-lg font-semibold">Publish</h3>
+            <p className="mb-3 text-xs text-muted-foreground">
+              Apply changes to your MongoDB-backed website settings.
             </p>
             <button
               onClick={() => saveSettings.mutate(draft)}
               disabled={saveSettings.isPending}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-2.5 text-sm font-medium disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition disabled:opacity-70"
             >
               <Save className="h-4 w-4" /> {saveSettings.isPending ? "Saving..." : "Save Changes"}
             </button>
             <button
               onClick={previewWebsite}
-              className="mt-2 w-full flex items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-medium"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl border border-border px-4 py-2.5 text-sm font-medium transition hover:bg-secondary"
             >
               <ExternalLink className="h-4 w-4" /> Preview Website
             </button>
@@ -420,11 +419,11 @@ function SettingsPage() {
             )}
           </Card>
           <Card>
-            <h3 className="font-display font-semibold mb-2">Tips</h3>
-            <ul className="text-xs text-muted-foreground space-y-1.5">
+            <h3 className="mb-2 font-display text-lg font-semibold">Tips</h3>
+            <ul className="space-y-1.5 text-xs text-muted-foreground">
               <li>Keep meta titles under 60 characters.</li>
               <li>Use absolute URLs for externally hosted images.</li>
-              <li>Preview after saving to verify live content.</li>
+              <li>Preview after saving to verify content.</li>
             </ul>
           </Card>
         </div>

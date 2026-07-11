@@ -2,11 +2,11 @@ const Admin = require("../models/Admin");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { AppError } = require("../utils/appError");
 const { clearAuthCookie, generateToken, setAuthCookie } = require("../services/tokenService");
+const { getDatabaseStatus } = require("../config/db");
 
-const isDevOverrideEnabled = () => {
-  const isProduction = (process.env.NODE_ENV || "development").toLowerCase() === "production";
-  return !isProduction && String(process.env.DEV_OVERRIDE || "").toLowerCase() === "true";
-};
+const isProduction = () => (process.env.NODE_ENV || "development").toLowerCase() === "production";
+const isDevOverrideEnabled = () => !isProduction() && String(process.env.DEV_OVERRIDE || "").toLowerCase() === "true";
+const shouldUseDevFallback = () => !isProduction() && (isDevOverrideEnabled() || getDatabaseStatus() !== "connected");
 
 const sanitizeAdmin = (admin) => ({
   id: admin._id || admin.id,
@@ -25,7 +25,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
     throw new AppError("Email and password are required", 400);
   }
 
-  if (isDevOverrideEnabled()) {
+  if (shouldUseDevFallback()) {
     const token = generateToken({
       _id: "dev",
       email,

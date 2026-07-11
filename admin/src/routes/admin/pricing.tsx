@@ -110,16 +110,10 @@ const formatPriceValue = (value: string) => {
   const normalizedWhole = whole.replace(/^0+(?=\d)/, "") || "0";
   const normalizedFraction = fractional.replace(/\./g, "").slice(0, 2);
 
-  return normalizedFraction
-    ? `$${normalizedWhole}.${normalizedFraction}`
-    : `$${normalizedWhole}`;
+  return normalizedFraction ? `$${normalizedWhole}.${normalizedFraction}` : `$${normalizedWhole}`;
 };
 
-const validateEditor = (
-  state: EditorState,
-  existingPlans: PricingPlan[],
-  currentId?: string,
-) => {
+const validateEditor = (state: EditorState, existingPlans: PricingPlan[], currentId?: string) => {
   const errors: FieldErrors = {};
   const title = state.title.trim();
   const price = state.price.trim();
@@ -316,7 +310,9 @@ function FloatingTextarea({
 function FieldMessage({ error, hint }: { error?: string; hint?: string }) {
   if (!error && !hint) return null;
   return (
-    <p className={cx("mt-2 text-xs", error ? "text-rose-600" : "text-slate-500")}>{error || hint}</p>
+    <p className={cx("mt-2 text-xs", error ? "text-rose-600" : "text-slate-500")}>
+      {error || hint}
+    </p>
   );
 }
 
@@ -445,7 +441,9 @@ function PricingPreview({ plan, previewMode }: { plan: EditorState; previewMode:
     <div className="relative overflow-hidden rounded-[28px] border border-slate-200/80 bg-slate-50 p-5 shadow-sm shadow-slate-200/30 transition duration-200 ease-out">
       <div className="mb-5 flex items-center justify-between gap-3 rounded-[20px] border border-slate-200/80 bg-white/90 px-4 py-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Live preview</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+            Live preview
+          </p>
           <p className="text-sm font-semibold text-slate-900">Website pricing card</p>
         </div>
         <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
@@ -510,7 +508,7 @@ function PlanTile({
         ))}
       </ul>
 
-      <div className="mt-6 grid grid-cols-[1fr_auto_auto] gap-2">
+      <div className="mt-6 grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto_auto]">
         <button
           type="button"
           onClick={onEdit}
@@ -559,7 +557,7 @@ function PricingPage() {
     queryFn: () => apiRequest<PricingResponse>("/pricing/admin"),
   });
 
-  const pricingPlans = data?.data.pricingPlans ?? [];
+  const pricingPlans = useMemo(() => data?.data.pricingPlans ?? [], [data?.data.pricingPlans]);
   const activePlans = pricingPlans.filter((plan) => plan.isActive).length;
   const featuredPlans = pricingPlans.filter((plan) => plan.isFeatured).length;
   const popularPlans = pricingPlans.filter((plan) => plan.isPopular).length;
@@ -591,11 +589,7 @@ function PricingPage() {
         isActive: state.isActive,
       };
 
-      return apiRequest(
-    state.id
-        ? `/pricing/update/${state.id}`
-        : "/pricing/create",
-    {
+      return apiRequest(state.id ? `/pricing/update/${state.id}` : "/pricing/create", {
         method: state.id ? "PATCH" : "POST",
         body: JSON.stringify(payload),
       });
@@ -924,14 +918,14 @@ function PricingPage() {
                       {editor.id ? "Edit pricing plan" : "Create pricing plan"}
                     </h2>
                     <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-                      Build your pricing plan with a live website preview. Press{' '}
+                      Build your pricing plan with a live website preview. Press{" "}
                       <kbd className="rounded-xl border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-700">
                         Esc
-                      </kbd>{' '}
-                      to close or{' '}
+                      </kbd>{" "}
+                      to close or{" "}
                       <kbd className="rounded-xl border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-700">
                         Ctrl/⌘ S
-                      </kbd>{' '}
+                      </kbd>{" "}
                       to save.
                     </p>
                   </div>
@@ -944,7 +938,7 @@ function PricingPage() {
                   <button
                     type="button"
                     onClick={closeEditor}
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-[18px] border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-[12px] border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                     aria-label="Close pricing editor"
                   >
                     <X className="h-5 w-5" />
@@ -1023,7 +1017,7 @@ function PricingPage() {
                     <button
                       type="button"
                       onClick={addFeature}
-                      className="inline-flex items-center gap-2 rounded-[18px] border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                      className="inline-flex items-center gap-2 rounded-[12px] border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                     >
                       <Plus className="h-4 w-4" /> Add feature
                     </button>
@@ -1076,14 +1070,18 @@ function PricingPage() {
                 >
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="rounded-[20px] border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Feature count</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                        Feature count
+                      </p>
                       <p className="mt-3 text-2xl font-semibold text-slate-900">
                         {editor.features.filter((feature) => feature.trim()).length}
                       </p>
                       <p className="mt-2 text-sm text-slate-500">Visible plan features.</p>
                     </div>
                     <div className="rounded-[20px] border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Billing limit</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                        Billing limit
+                      </p>
                       <p className="mt-3 text-2xl font-semibold text-slate-900">
                         {editor.billingType === "monthly" ? "Monthly" : "Yearly"}
                       </p>
@@ -1091,7 +1089,8 @@ function PricingPage() {
                     </div>
                   </div>
                   <p className="mt-4 text-sm leading-6 text-slate-500">
-                    Keep the plan focused and easy to scan. Most customers choose plans with 3–6 strong benefits.
+                    Keep the plan focused and easy to scan. Most customers choose plans with 3–6
+                    strong benefits.
                   </p>
                 </BuilderSection>
 
@@ -1149,12 +1148,20 @@ function PricingPage() {
                 >
                   <div className="space-y-4">
                     <div className="rounded-[20px] border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">URL slug</p>
-                      <p className="mt-3 text-sm text-slate-900">/pricing/{slugify(editor.title)}</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                        URL slug
+                      </p>
+                      <p className="mt-3 text-sm text-slate-900">
+                        /pricing/{slugify(editor.title)}
+                      </p>
                     </div>
                     <div className="rounded-[20px] border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Meta preview</p>
-                      <p className="mt-3 font-semibold text-slate-900">{editor.title} — {editor.shortDescription}</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                        Meta preview
+                      </p>
+                      <p className="mt-3 font-semibold text-slate-900">
+                        {editor.title} — {editor.shortDescription}
+                      </p>
                     </div>
                   </div>
                 </BuilderSection>
@@ -1178,13 +1185,17 @@ function PricingPage() {
                       ? "Validation issues need attention"
                       : "All essentials are valid"}
                   </p>
-                  <p>{savePlan.isPending ? "Saving changes..." : "Unsaved changes will be saved when you create or update the plan."}</p>
+                  <p>
+                    {savePlan.isPending
+                      ? "Saving changes..."
+                      : "Unsaved changes will be saved when you create or update the plan."}
+                  </p>
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <button
                     type="button"
                     onClick={closeEditor}
-                    className="inline-flex items-center justify-center rounded-[18px] border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                    className="inline-flex items-center justify-center rounded-[12px] border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                   >
                     Cancel
                   </button>
@@ -1192,7 +1203,7 @@ function PricingPage() {
                     type="submit"
                     disabled={savePlan.isPending}
                     aria-busy={savePlan.isPending}
-                    className="inline-flex items-center justify-center gap-2 rounded-[18px] bg-gradient-to-r from-[#6D5DF6] to-[#8B5CF6] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/10 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center justify-center gap-2 rounded-[12px] bg-gradient-to-r from-[#6D5DF6] to-[#8B5CF6] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/10 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {savePlan.isPending ? (
                       <svg
@@ -1218,7 +1229,11 @@ function PricingPage() {
                     ) : (
                       <Save className="h-4 w-4" />
                     )}
-                    {savePlan.isPending ? "Saving plan..." : editor.id ? "Save plan" : "Create plan"}
+                    {savePlan.isPending
+                      ? "Saving plan..."
+                      : editor.id
+                        ? "Save plan"
+                        : "Create plan"}
                   </button>
                 </div>
               </div>

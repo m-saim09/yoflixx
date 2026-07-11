@@ -33,7 +33,7 @@ const TEAM = [
 
 function AboutPage() {
   return (
-    <main className="relative overflow-hidden">
+    <main className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]">
       <Navbar />
       <PageHero
         eyebrow="About Yoflix"
@@ -56,8 +56,8 @@ function AboutPage() {
             </p>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="relative mx-auto aspect-square w-full max-w-md">
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.35),transparent_70%)] blur-2xl" />
-            <motion.img src={hero3d} alt="3D glass ring" className="relative h-full w-full object-contain drop-shadow-[0_40px_60px_rgba(109,93,252,0.35)]" animate={{ y: [0, -16, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(59,110,245,0.22),transparent_70%)] blur-2xl" />
+            <motion.img src={hero3d} alt="3D glass ring" className="relative h-full w-full object-contain drop-shadow-[0_40px_60px_rgba(59,110,245,0.24)]" animate={{ y: [0, -16, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
             <motion.img src={sphereImg} alt="" aria-hidden className="absolute -left-4 top-12 h-16 w-16 opacity-80" animate={{ y: [0, 20, 0] }} transition={{ duration: 7, repeat: Infinity }} />
           </motion.div>
         </div>
@@ -71,7 +71,7 @@ function AboutPage() {
             { icon: Eye, t: "Our Vision", d: "A world where ambitious sellers don't have to choose between growth and quality of life. Yoflix runs the storefront; you build the brand." },
           ].map((b, i) => (
             <motion.div key={b.t} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }} className="glass-strong rounded-3xl p-10">
-              <div className="grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-soft">
+              <div className="grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-[0_16px_36px_-20px_rgba(59,110,245,0.38)]">
                 <b.icon className="h-7 w-7" />
               </div>
               <h3 className="mt-6 text-2xl font-semibold">{b.t}</h3>
@@ -91,7 +91,7 @@ function AboutPage() {
           <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {VALUES.map((v, i) => (
               <motion.div key={v.t} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }} whileHover={{ y: -6 }} className="glass-strong rounded-3xl p-6">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white shadow-soft text-primary">
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white shadow-soft text-primary border border-primary/10">
                   <v.icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-5 text-lg font-semibold">{v.t}</h3>

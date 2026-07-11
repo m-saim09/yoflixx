@@ -50,8 +50,11 @@ export const Route = createFileRoute("/admin/analytics")({
 
 function AnalyticsPage() {
   return (
-    <AdminShell title="Analytics" description="Performance, traffic and revenue insights.">
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <AdminShell
+      title="Analytics"
+      description="Performance, traffic and revenue insights presented with a calmer executive view."
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="Revenue"
           value={`$${kpis.revenue.toLocaleString()}`}
@@ -82,11 +85,18 @@ function AnalyticsPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <h3 className="font-display font-semibold mb-1">Monthly Growth</h3>
-          <p className="text-xs text-muted-foreground mb-3">Leads vs Inquiries</p>
-          <div className="h-72">
+          <div className="mb-3 flex items-start justify-between gap-3">
+            <div>
+              <h3 className="font-display font-semibold">Monthly Growth</h3>
+              <p className="text-xs text-muted-foreground">Leads vs inquiries</p>
+            </div>
+            <div className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-violet-700">
+              Updated
+            </div>
+          </div>
+          <div className="h-60">
             <ResponsiveContainer>
               <LineChart data={monthlyGrowth}>
                 <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -124,9 +134,9 @@ function AnalyticsPage() {
         </Card>
 
         <Card>
-          <h3 className="font-display font-semibold mb-1">Traffic Sources</h3>
-          <p className="text-xs text-muted-foreground mb-3">Last 30 days</p>
-          <div className="h-56">
+          <h3 className="mb-1 font-display font-semibold">Traffic Sources</h3>
+          <p className="mb-3 text-xs text-muted-foreground">Last 30 days</p>
+          <div className="h-48">
             <ResponsiveContainer>
               <PieChart>
                 <Pie
@@ -156,11 +166,11 @@ function AnalyticsPage() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card>
-          <h3 className="font-display font-semibold mb-1">Revenue</h3>
+          <h3 className="mb-1 font-display font-semibold">Revenue</h3>
           <p className="text-xs text-muted-foreground mb-3">Monthly</p>
-          <div className="h-56">
+          <div className="h-48">
             <ResponsiveContainer>
               <BarChart data={monthlyGrowth}>
                 <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -189,7 +199,7 @@ function AnalyticsPage() {
             <MonitorSmartphone className="h-4 w-4 text-primary" /> Devices
           </h3>
           <p className="text-xs text-muted-foreground mb-3">% of sessions</p>
-          <div className="space-y-3 mt-4">
+          <div className="space-y-3 mt-3">
             {devices.map((d) => (
               <div key={d.name}>
                 <div className="flex items-center justify-between text-sm mb-1">
@@ -208,7 +218,7 @@ function AnalyticsPage() {
         </Card>
 
         <Card>
-          <h3 className="font-display font-semibold mb-3">Conversion Funnel</h3>
+          <h3 className="mb-3 font-display font-semibold">Conversion Funnel</h3>
           <div className="space-y-2">
             {funnel.map((f, i) => {
               const pct = (f.value / funnel[0].value) * 100;
@@ -293,9 +303,9 @@ function AnalyticsPage() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <h3 className="font-display font-semibold mb-3">Activity Timeline</h3>
+          <h3 className="mb-3 font-display font-semibold">Activity Timeline</h3>
           <div className="relative pl-6">
             <div className="absolute left-2 top-2 bottom-2 w-px bg-border" />
             {activity.map((a, i) => (

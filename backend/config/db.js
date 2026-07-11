@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 let databaseStatus = "disconnected";
+let lastError = null;
 
 mongoose.set("strictQuery", true);
 
@@ -12,8 +13,9 @@ mongoose.connection.on("disconnected", () => {
   databaseStatus = "disconnected";
 });
 
-mongoose.connection.on("error", () => {
+mongoose.connection.on("error", (error) => {
   databaseStatus = "error";
+  lastError = error;
 });
 
 const isProduction = () => (process.env.NODE_ENV || "development").toLowerCase() === "production";
@@ -43,7 +45,7 @@ const connectDatabase = async () => {
       await mongoose.connect(mongoUri, {
         serverSelectionTimeoutMS: 10000,
         autoIndex: true,
-        bufferCommands: false,
+        bufferCommands: true,
       });
 
       databaseStatus = "connected";
@@ -69,5 +71,6 @@ const connectDatabase = async () => {
 };
 
 const getDatabaseStatus = () => databaseStatus;
+const getLastDatabaseError = () => lastError;
 
-module.exports = { connectDatabase, getDatabaseStatus };
+module.exports = { connectDatabase, getDatabaseStatus, getLastDatabaseError };

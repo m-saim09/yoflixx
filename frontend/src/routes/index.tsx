@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Navbar, Hero, LogoStrip, CoreExpertise, MarketplaceSupport, Services, Stats, TestimonialsMarquee, Reviews, OurWorkingProcess, WhyChoose, Pricing, FinalCTA, Footer,
+  Navbar, Hero, LogoStrip, HomepageTestimonialsSection, CoreExpertise, MarketplaceSupport, Services, Stats, TestimonialsMarquee, Reviews, OurWorkingProcess, WhyChoose, Pricing, FinalCTA, Footer,
 } from "@/components/sections";
 import { GlobalPresence as MapGlobalPresence } from "../../map/src/components/global-presence";
 
@@ -22,6 +22,7 @@ function Index() {
       <Navbar />
       <Hero />
       <LogoStrip />
+      <HomepageTestimonialsSection />
       <Services />
       <OurWorkingProcess />
       <CoreExpertise />

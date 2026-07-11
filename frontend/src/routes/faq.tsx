@@ -106,22 +106,18 @@ function FAQPage() {
               Everything you need to know about Yoflix and how we help businesses scale on eBay, Walmart and TikTok Shop with clarity, speed and precision.
             </motion.p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/consultation"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_45px_-18px_rgba(30,64,175,0.85)] transition duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_24px_60px_-22px_rgba(37,99,235,0.75)]"
-              >
-                Book Free Consultation
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-              <Link
-                to="/pricing"
-                className="group inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-[0_16px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:border-blue-200 hover:text-blue-700"
-              >
+            <Link
+              to="/consultation"
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_45px_-18px_rgba(30,64,175,0.85)] transition duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_24px_60px_-22px_rgba(37,99,235,0.75)]"
+            >
+              Book Free Consultation
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+              <Link to="/pricing" className="group inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-[0_16px_50px_-28px_rgba(15,23,42,0.35)] backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:border-blue-200 hover:text-blue-700">
                 View Pricing
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
-            </div>
+            </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className="mt-8 flex flex-wrap gap-3 text-sm text-slate-600">
               {[
